@@ -319,7 +319,7 @@
                     <h2 class="text-2xl font-extrabold text-amber-400 mb-2 flex items-center">
                         <i class="fa-solid fa-shield-halved mr-3"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : révoquez l'accès des membres du staff, supprimez des sanctions ciblées, gérez les rôles Super Admin et modérez les idées.</p>
+                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : révoquez l'accès des membres du staff, supprimez des sanctions ciblées, modérez les idées et gérez le règlement.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -331,7 +331,16 @@
                         <div class="space-y-3 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar" id="admin-staff-list"></div>
                     </div>
 
-                    <!-- 2. Rulebook Editor -->
+                    <!-- 2. Ideas Moderation in Admin Panel -->
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-lightbulb mr-3 text-amber-400"></i> Modération des Idées Staff
+                        </h3>
+                        <p class="text-xs text-slate-400">Visualisez et supprimez directement les suggestions postées par l'équipe.</p>
+                        <div class="space-y-2.5 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar" id="admin-ideas-list"></div>
+                    </div>
+
+                    <!-- 3. Rulebook Editor -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-book-bookmark mr-3 text-rose-400"></i> Éditer le Règlement
@@ -357,7 +366,7 @@
                         </div>
                     </div>
 
-                    <!-- 3. Bareme Editor -->
+                    <!-- 4. Bareme Editor -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-gavel mr-3 text-rose-400"></i> Gérer le Barème
@@ -383,7 +392,7 @@
                         </div>
                     </div>
 
-                    <!-- 4. Ticket Editor -->
+                    <!-- 5. Ticket Editor -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-ticket mr-3 text-rose-400"></i> Gérer les Modèles Tickets
@@ -460,7 +469,6 @@
         window.addEventListener('DOMContentLoaded', async () => {
             await fetchCloudData();
             initLoginDropdown();
-            // Initialiser le volume par défaut à 50%
             const audio = document.getElementById('xmas-audio');
             audio.volume = 0.5;
         });
@@ -544,7 +552,6 @@
 
             currentUser = account;
             
-            // LANCEMENT AUTOMATIQUE DE LA MUSIQUE LORS DU CLIC DE CONNEXION
             const audio = document.getElementById('xmas-audio');
             audio.play().then(() => {
                 isMusicPlaying = true;
@@ -611,7 +618,6 @@
             document.getElementById('dash-ideas-count').textContent = dbData.ideas ? dbData.ideas.length : 0;
         }
 
-        // --- MES SANCTIONS PERSONNELLES ---
         function renderMySanctions() {
             const container = document.getElementById('my-personal-sanctions-list');
             const sanctions = (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[currentUser.name]) || [];
@@ -805,11 +811,13 @@
             dbData.ideas = dbData.ideas.filter(i => i.id !== id);
             await saveCloudData();
             renderIdeas();
+            if (currentUser && currentUser.isSuperAdmin) renderAdminPanel();
             showToast("Idée supprimée !");
         }
 
         // --- PANEL ADMIN ---
         function renderAdminPanel() {
+            // 1. Staff Management
             const staffList = document.getElementById('admin-staff-list');
             staffList.innerHTML = dbData.staffAccounts.map((acc, index) => {
                 const sanctions = (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[acc.name]) || [];
@@ -845,6 +853,23 @@
                 `;
             }).join('');
 
+            // 2. Ideas Moderation List in Admin
+            const adminIdeasContainer = document.getElementById('admin-ideas-list');
+            if (!dbData.ideas || dbData.ideas.length === 0) {
+                adminIdeasContainer.innerHTML = '<p class="text-slate-500 text-xs italic">Aucune idée postée.</p>';
+            } else {
+                adminIdeasContainer.innerHTML = dbData.ideas.map(idea => `
+                    <div class="bg-xmasBg border border-xmasBorder p-3.5 rounded-2xl flex items-center justify-between gap-3 text-xs">
+                        <div class="overflow-hidden">
+                            <span class="font-bold text-white block truncate">${idea.title}</span>
+                            <span class="text-[10px] text-rose-400">Proposé par ${idea.author}</span>
+                        </div>
+                        <button onclick="deleteIdea(${idea.id})" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-3 py-1.5 rounded-xl font-bold shrink-0 transition-all"><i class="fa-solid fa-trash"></i> Supprimer</button>
+                    </div>
+                `).join('');
+            }
+
+            // 3. Rulebook List
             const ruleList = document.getElementById('admin-rulebook-list');
             ruleList.innerHTML = dbData.staffParts.map((art, idx) => `
                 <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
@@ -856,6 +881,7 @@
                 </div>
             `).join('');
 
+            // 4. Bareme List
             const baremeList = document.getElementById('admin-bareme-list');
             baremeList.innerHTML = dbData.sanctionsData.map((item, idx) => `
                 <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
@@ -867,6 +893,7 @@
                 </div>
             `).join('');
 
+            // 5. Ticket List
             const ticketList = document.getElementById('admin-ticket-list');
             ticketList.innerHTML = dbData.ticketResponses.map((t, idx) => `
                 <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
