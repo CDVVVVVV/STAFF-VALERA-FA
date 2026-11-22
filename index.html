@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALERA RP | Portail Staff Officiel</title>
+    <title>VALERA RP | Portail Staff Ultimate</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -39,7 +39,7 @@
                     V
                 </div>
                 <h1 class="text-2xl font-black tracking-wider text-white">VALERA RP</h1>
-                <p class="text-xs font-semibold text-blue-400 mt-1 uppercase tracking-widest">Portail Staff Historique</p>
+                <p class="text-xs font-semibold text-blue-400 mt-1 uppercase tracking-widest">Portail Staff Ultimate</p>
             </div>
 
             <form id="login-form" class="space-y-4 relative z-10" onsubmit="handleLogin(event)">
@@ -223,17 +223,17 @@
                 </div>
             </div>
 
-            <!-- TAB 5: ADMIN PANEL R2 -->
+            <!-- TAB 5: ADMIN PANEL R2 (FULL CONTROL) -->
             <div id="tab-admin" class="tab-content hidden space-y-8">
                 <div class="bg-gradient-to-r from-amber-500/15 via-valeraCard to-valeraCard border border-amber-500/30 rounded-2xl p-6 shadow-2xl">
                     <h2 class="text-xl font-black text-amber-400 mb-1 flex items-center">
-                        <i class="fa-solid fa-shield-halved mr-2.5"></i> Panel d'Administration R2 (Contrôle Total)
+                        <i class="fa-solid fa-shield-halved mr-2.5"></i> Panel Admin R2 (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Modifiez absolument tout en direct sur le cloud : attribuez ou retirez le rôle <strong>Super Admin</strong> à n'importe quel staff, gérez les articles, modifiez le barème et les tickets.</p>
+                    <p class="text-sm text-slate-300">Ajoutez, modifiez ou supprimez en direct absolu sur le cloud : gérez les rôles Super Admin, éditez le règlement, le barème et les tickets de manière instantanée.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- 1. Staff Management & Super Admin toggle -->
+                    <!-- 1. Staff Management -->
                     <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-users-gear mr-2.5 text-blue-400"></i> Gestion des Comptes & Droits Super Admin
@@ -241,12 +241,13 @@
                         <div class="space-y-3 max-h-[420px] overflow-y-auto pr-2" id="admin-staff-list"></div>
                     </div>
 
-                    <!-- 2. Rulebook Editor -->
+                    <!-- 2. Rulebook Editor & Modifier -->
                     <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-book-bookmark mr-2.5 text-blue-400"></i> Éditer / Ajouter un Article du Règlement
+                            <i class="fa-solid fa-book-bookmark mr-2.5 text-blue-400"></i> Ajouter / Modifier le Règlement
                         </h3>
-                        <form onsubmit="handleSaveNewArticle(event)" class="space-y-3.5">
+                        <form onsubmit="handleSaveArticle(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-article-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'Article</label>
                                 <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
@@ -255,22 +256,28 @@
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu / Texte</label>
                                 <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium leading-relaxed" required></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
-                                + Ajouter l'Article
-                            </button>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="article-submit-btn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
+                                    + Ajouter l'Article
+                                </button>
+                                <button type="button" id="article-cancel-btn" onclick="resetArticleForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-xl text-xs font-bold">
+                                    Annuler
+                                </button>
+                            </div>
                         </form>
                         <div class="pt-4 border-t border-valeraBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels (Suppression)</h4>
-                            <div class="space-y-2 max-h-[120px] overflow-y-auto" id="admin-rulebook-list"></div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels (Modifier / Supprimer)</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-rulebook-list"></div>
                         </div>
                     </div>
 
-                    <!-- 3. Bareme Editor -->
+                    <!-- 3. Bareme Editor & Modifier -->
                     <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-gavel mr-2.5 text-blue-400"></i> Gérer le Barème des Sanctions
                         </h3>
-                        <form onsubmit="handleSaveNewBareme(event)" class="space-y-3.5">
+                        <form onsubmit="handleSaveBareme(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-bareme-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Motif / Infraction</label>
                                 <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
@@ -279,22 +286,28 @@
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sanction Appliquée</label>
                                 <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
-                                + Ajouter au Barème
-                            </button>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="bareme-submit-btn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
+                                    + Ajouter au Barème
+                                </button>
+                                <button type="button" id="bareme-cancel-btn" onclick="resetBaremeForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-xl text-xs font-bold">
+                                    Annuler
+                                </button>
+                            </div>
                         </form>
                         <div class="pt-4 border-t border-valeraBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel (Suppression)</h4>
-                            <div class="space-y-2 max-h-[120px] overflow-y-auto" id="admin-bareme-list"></div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel (Modifier / Supprimer)</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-bareme-list"></div>
                         </div>
                     </div>
 
-                    <!-- 4. Ticket Response Editor -->
+                    <!-- 4. Ticket Response Editor & Modifier -->
                     <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-ticket mr-2.5 text-blue-400"></i> Gérer les Modèles de Tickets
                         </h3>
-                        <form onsubmit="handleSaveNewTicket(event)" class="space-y-3.5">
+                        <form onsubmit="handleSaveTicket(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-ticket-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre du Modèle</label>
                                 <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
@@ -303,13 +316,18 @@
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Texte de la Réponse</label>
                                 <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium leading-relaxed" required></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
-                                + Ajouter le Modèle
-                            </button>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="ticket-submit-btn" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
+                                    + Ajouter le Modèle
+                                </button>
+                                <button type="button" id="ticket-cancel-btn" onclick="resetTicketForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-xl text-xs font-bold">
+                                    Annuler
+                                </button>
+                            </div>
                         </form>
                         <div class="pt-4 border-t border-valeraBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels (Suppression)</h4>
-                            <div class="space-y-2 max-h-[120px] overflow-y-auto" id="admin-ticket-list"></div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels (Modifier / Supprimer)</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-ticket-list"></div>
                         </div>
                     </div>
                 </div>
@@ -536,7 +554,7 @@
         }
 
         function renderAdminPanel() {
-            // 1. Staff List & Super Admin Toggles
+            // 1. Staff List
             const staffList = document.getElementById('admin-staff-list');
             staffList.innerHTML = dbData.staffAccounts.map((acc, index) => `
                 <div class="bg-[#090a0f] border border-valeraBorder p-3.5 rounded-xl flex items-center justify-between">
@@ -546,7 +564,7 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <button onclick="toggleSuperAdmin(${index})" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${acc.isSuperAdmin ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
-                            ${acc.isSuperAdmin ? '👑 Super Admin' : 'Staff Simple'}
+                            ${acc.isSuperAdmin ? '👑 Super Admin' : 'Staff'}
                         </button>
                         <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all" title="Ajouter Strike">
                             + Strike
@@ -555,30 +573,39 @@
                 </div>
             `).join('');
 
-            // 2. Rulebook List for deletion
+            // 2. Rulebook List
             const ruleList = document.getElementById('admin-rulebook-list');
             ruleList.innerHTML = dbData.staffParts.map((art, idx) => `
                 <div class="bg-[#090a0f] border border-valeraBorder p-2.5 rounded-xl flex items-center justify-between text-xs">
-                    <span class="font-medium text-slate-300 truncate max-w-[200px]">${art.title}</span>
-                    <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${art.title}</span>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="editArticle(${idx})" class="text-blue-400 hover:text-blue-300 px-2 py-1" title="Modifier"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
             `).join('');
 
-            // 3. Bareme List for deletion
+            // 3. Bareme List
             const baremeList = document.getElementById('admin-bareme-list');
             baremeList.innerHTML = dbData.sanctionsData.map((item, idx) => `
                 <div class="bg-[#090a0f] border border-valeraBorder p-2.5 rounded-xl flex items-center justify-between text-xs">
-                    <span class="font-medium text-slate-300 truncate max-w-[200px]">${item.motif}</span>
-                    <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${item.motif}</span>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="editBareme(${idx})" class="text-blue-400 hover:text-blue-300 px-2 py-1" title="Modifier"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
             `).join('');
 
-            // 4. Ticket List for deletion
+            // 4. Ticket List
             const ticketList = document.getElementById('admin-ticket-list');
             ticketList.innerHTML = dbData.ticketResponses.map((t, idx) => `
                 <div class="bg-[#090a0f] border border-valeraBorder p-2.5 rounded-xl flex items-center justify-between text-xs">
-                    <span class="font-medium text-slate-300 truncate max-w-[200px]">${t.title}</span>
-                    <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${t.title}</span>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="editTicket(${idx})" class="text-blue-400 hover:text-blue-300 px-2 py-1" title="Modifier"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -603,17 +630,42 @@
             showToast(`Sanction ajoutée pour ${staffName} !`);
         }
 
-        async function handleSaveNewArticle(e) {
+        // --- ARTICLE CRUD ---
+        async function handleSaveArticle(e) {
             e.preventDefault();
+            const idx = parseInt(document.getElementById('edit-article-index').value);
             const title = document.getElementById('new-article-title').value;
             const text = document.getElementById('new-article-text').value;
-            dbData.staffParts.push({ title, text });
+
+            if (idx === -1) {
+                dbData.staffParts.push({ title, text });
+                showToast("Article ajouté au cloud !");
+            } else {
+                dbData.staffParts[idx] = { title, text };
+                showToast("Article modifié avec succès !");
+            }
+
             await saveCloudData();
-            document.getElementById('new-article-title').value = '';
-            document.getElementById('new-article-text').value = '';
+            resetArticleForm();
             renderRulebook();
             renderAdminPanel();
-            showToast("Article ajouté au cloud !");
+        }
+
+        function editArticle(idx) {
+            const art = dbData.staffParts[idx];
+            document.getElementById('edit-article-index').value = idx;
+            document.getElementById('new-article-title').value = art.title;
+            document.getElementById('new-article-text').value = art.text;
+            document.getElementById('article-submit-btn').textContent = "Modifier l'Article";
+            document.getElementById('article-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetArticleForm() {
+            document.getElementById('edit-article-index').value = "-1";
+            document.getElementById('new-article-title').value = '';
+            document.getElementById('new-article-text').value = '';
+            document.getElementById('article-submit-btn').textContent = "+ Ajouter l'Article";
+            document.getElementById('article-cancel-btn').classList.add('hidden');
         }
 
         async function deleteArticle(idx) {
@@ -625,17 +677,42 @@
             showToast("Article supprimé !");
         }
 
-        async function handleSaveNewBareme(e) {
+        // --- BAREME CRUD ---
+        async function handleSaveBareme(e) {
             e.preventDefault();
+            const idx = parseInt(document.getElementById('edit-bareme-index').value);
             const motif = document.getElementById('new-bareme-motif').value;
             const sanction = document.getElementById('new-bareme-sanction').value;
-            dbData.sanctionsData.push({ motif, sanction });
+
+            if (idx === -1) {
+                dbData.sanctionsData.push({ motif, sanction });
+                showToast("Barème mis à jour !");
+            } else {
+                dbData.sanctionsData[idx] = { motif, sanction };
+                showToast("Ligne de barème modifiée !");
+            }
+
             await saveCloudData();
-            document.getElementById('new-bareme-motif').value = '';
-            document.getElementById('new-bareme-sanction').value = '';
+            resetBaremeForm();
             renderBareme();
             renderAdminPanel();
-            showToast("Barème mis à jour !");
+        }
+
+        function editBareme(idx) {
+            const item = dbData.sanctionsData[idx];
+            document.getElementById('edit-bareme-index').value = idx;
+            document.getElementById('new-bareme-motif').value = item.motif;
+            document.getElementById('new-bareme-sanction').value = item.sanction;
+            document.getElementById('bareme-submit-btn').textContent = "Modifier le Barème";
+            document.getElementById('bareme-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetBaremeForm() {
+            document.getElementById('edit-bareme-index').value = "-1";
+            document.getElementById('new-bareme-motif').value = '';
+            document.getElementById('new-bareme-sanction').value = '';
+            document.getElementById('bareme-submit-btn').textContent = "+ Ajouter au Barème";
+            document.getElementById('bareme-cancel-btn').classList.add('hidden');
         }
 
         async function deleteBareme(idx) {
@@ -647,17 +724,42 @@
             showToast("Ligne supprimée !");
         }
 
-        async function handleSaveNewTicket(e) {
+        // --- TICKET CRUD ---
+        async function handleSaveTicket(e) {
             e.preventDefault();
+            const idx = parseInt(document.getElementById('edit-ticket-index').value);
             const title = document.getElementById('new-ticket-title').value;
             const text = document.getElementById('new-ticket-text').value;
-            dbData.ticketResponses.push({ title, text });
+
+            if (idx === -1) {
+                dbData.ticketResponses.push({ title, text });
+                showToast("Modèle de ticket ajouté !");
+            } else {
+                dbData.ticketResponses[idx] = { title, text };
+                showToast("Modèle de ticket modifié !");
+            }
+
             await saveCloudData();
-            document.getElementById('new-ticket-title').value = '';
-            document.getElementById('new-ticket-text').value = '';
+            resetTicketForm();
             renderTickets();
             renderAdminPanel();
-            showToast("Modèle de ticket ajouté !");
+        }
+
+        function editTicket(idx) {
+            const t = dbData.ticketResponses[idx];
+            document.getElementById('edit-ticket-index').value = idx;
+            document.getElementById('new-ticket-title').value = t.title;
+            document.getElementById('new-ticket-text').value = t.text;
+            document.getElementById('ticket-submit-btn').textContent = "Modifier le Modèle";
+            document.getElementById('ticket-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetTicketForm() {
+            document.getElementById('edit-ticket-index').value = "-1";
+            document.getElementById('new-ticket-title').value = '';
+            document.getElementById('new-ticket-text').value = '';
+            document.getElementById('ticket-submit-btn').textContent = "+ Ajouter le Modèle";
+            document.getElementById('ticket-cancel-btn').classList.add('hidden');
         }
 
         async function deleteTicket(idx) {
