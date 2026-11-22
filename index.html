@@ -70,9 +70,9 @@
         });
     </script>
 
-    <!-- AUDIO DE NOËL (LECTEUR DISCRET) -->
+    <!-- AUDIO DE NOËL -->
     <audio id="xmas-audio" loop>
-        <source src="https://actions.google.com/sounds/v1/holidays/christmas_music_box.ogg" type="audio/ogg">
+        <source src="noel.mp3" type="audio/mpeg">
     </audio>
 
     <!-- LOGIN OVERLAY -->
@@ -165,12 +165,25 @@
                 </nav>
             </div>
 
-            <!-- MUSIC TOGGLE & USER FOOTER -->
+            <!-- AUDIO & USER CONTROLS IN SIDEBAR -->
             <div class="space-y-4 pt-6 border-t border-xmasBorder">
-                <button onclick="toggleXmasMusic()" id="music-btn" class="w-full bg-xmasBg border border-xmasBorder hover:border-rose-500/40 text-slate-300 py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 transition-all">
-                    <i class="fa-solid fa-music text-rose-400"></i>
-                    <span id="music-text">Activer Musique Noël 🎵</span>
-                </button>
+                <div class="bg-xmasBg border border-xmasBorder p-3.5 rounded-2xl space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-300 flex items-center">
+                            <i class="fa-solid fa-music text-rose-400 mr-2"></i> Ambiance Noël
+                        </span>
+                        <button onclick="toggleXmasMusic()" id="music-btn" class="text-[11px] font-bold text-rose-400 hover:underline">
+                            <span id="music-text">Couper 🎵</span>
+                        </button>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-[10px] text-slate-400 mb-1">
+                            <span>Volume</span>
+                            <span id="volume-label">50%</span>
+                        </div>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" oninput="changeVolume(this.value)" class="w-full accent-rose-500 cursor-pointer">
+                    </div>
+                </div>
 
                 <div class="flex items-center justify-between">
                     <div class="overflow-hidden pr-2">
@@ -272,7 +285,7 @@
                 <div id="tickets-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
-            <!-- TAB 5: MES SANCTIONS (NOUVEAU - UNIQUEMENT SES SANCTIONS) -->
+            <!-- TAB 5: MES SANCTIONS (UNIQUEMENT SES SANCTIONS) -->
             <div id="tab-mysanctions" class="tab-content hidden space-y-6">
                 <div class="bg-gradient-to-r from-rose-950/60 via-xmasCard to-xmasCard border border-rose-500/30 rounded-[2rem] p-8 shadow-2xl">
                     <h2 class="text-2xl lg:text-3xl font-extrabold text-white flex items-center mb-2">
@@ -300,13 +313,13 @@
                 <div id="ideas-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
-            <!-- TAB 7: PANEL ADMIN (CONTRÔLE TOTAL AVEC RETRAIT DE SANCTIONS & VIRER MEMBRE) -->
+            <!-- TAB 7: PANEL ADMIN -->
             <div id="tab-admin" class="tab-content hidden space-y-8">
                 <div class="bg-gradient-to-r from-amber-500/20 via-xmasCard to-xmasCard border border-amber-500/30 rounded-[2rem] p-8 shadow-2xl">
                     <h2 class="text-2xl font-extrabold text-amber-400 mb-2 flex items-center">
                         <i class="fa-solid fa-shield-halved mr-3"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : révoquez l'accès des membres du staff, supprimez des sanctions ciblées, gérez les rôles Super Admin et modérez le règlement.</p>
+                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : révoquez l'accès des membres du staff, supprimez des sanctions ciblées, gérez les rôles Super Admin et modérez les idées.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -447,6 +460,9 @@
         window.addEventListener('DOMContentLoaded', async () => {
             await fetchCloudData();
             initLoginDropdown();
+            // Initialiser le volume par défaut à 50%
+            const audio = document.getElementById('xmas-audio');
+            audio.volume = 0.5;
         });
 
         function toggleXmasMusic() {
@@ -454,13 +470,19 @@
             const btnText = document.getElementById('music-text');
             if (isMusicPlaying) {
                 audio.pause();
-                btnText.textContent = "Activer Musique Noël 🎵";
+                btnText.textContent = "Activer 🎵";
                 isMusicPlaying = false;
             } else {
-                audio.play().catch(e => console.log("Audio autoplay bloqué"));
-                btnText.textContent = "Couper Musique 🔇";
+                audio.play().catch(e => console.log("Audio bloqué par le navigateur"));
+                btnText.textContent = "Couper 🎵";
                 isMusicPlaying = true;
             }
+        }
+
+        function changeVolume(val) {
+            const audio = document.getElementById('xmas-audio');
+            audio.volume = val;
+            document.getElementById('volume-label').textContent = Math.round(val * 100) + '%';
         }
 
         async function fetchCloudData() {
@@ -521,6 +543,14 @@
             }
 
             currentUser = account;
+            
+            // LANCEMENT AUTOMATIQUE DE LA MUSIQUE LORS DU CLIC DE CONNEXION
+            const audio = document.getElementById('xmas-audio');
+            audio.play().then(() => {
+                isMusicPlaying = true;
+                document.getElementById('music-text').textContent = "Couper 🎵";
+            }).catch(e => console.log("Audio autoplay ignoré"));
+
             document.getElementById('login-modal').classList.add('hidden');
             document.getElementById('app-container').classList.remove('hidden');
             document.getElementById('app-container').classList.add('flex');
@@ -540,6 +570,8 @@
 
         function handleLogout() {
             currentUser = null;
+            document.getElementById('xmas-audio').pause();
+            isMusicPlaying = false;
             document.getElementById('app-container').classList.remove('flex');
             document.getElementById('app-container').classList.add('hidden');
             document.getElementById('login-modal').classList.remove('hidden');
@@ -776,7 +808,7 @@
             showToast("Idée supprimée !");
         }
 
-        // --- PANEL ADMIN (VIRER MEMBRE, RETIRER SANCTION, ETC.) ---
+        // --- PANEL ADMIN ---
         function renderAdminPanel() {
             const staffList = document.getElementById('admin-staff-list');
             staffList.innerHTML = dbData.staffAccounts.map((acc, index) => {
