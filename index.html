@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALERA RP - Portail Staff & Administration</title>
+    <title>VALERA RP | Portail Staff Officiel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,10 +11,11 @@
             theme: {
                 extend: {
                     colors: {
-                        darkbg: '#0f172a',
-                        cardbg: '#1e293b',
-                        accent: '#6366f1',
-                        accenthover: '#4f46e5'
+                        valeraBg: '#090a0f',
+                        valeraCard: '#131622',
+                        valeraBorder: '#222639',
+                        valeraAccent: '#3b82f6',
+                        valeraAccentHover: '#2563eb'
                     }
                 }
             }
@@ -22,47 +23,47 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Outfit', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+<body class="bg-valeraBg text-slate-100 min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
 
     <!-- LOGIN OVERLAY -->
-    <div id="login-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-8 shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div id="login-modal" class="fixed inset-0 z-50 bg-[#090a0f]/95 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="bg-valeraCard border border-valeraBorder rounded-2xl w-full max-w-md p-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
             
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 text-2xl mb-4 font-bold">
+            <div class="text-center mb-8 relative z-10">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-600 text-white text-2xl mb-4 font-black shadow-lg shadow-blue-600/30">
                     V
                 </div>
-                <h1 class="text-2xl font-bold tracking-tight text-white">VALERA RP</h1>
-                <p class="text-sm text-slate-400 mt-1">Portail Administratif Sécurisé</p>
+                <h1 class="text-2xl font-black tracking-wider text-white">VALERA RP</h1>
+                <p class="text-xs font-semibold text-blue-400 mt-1 uppercase tracking-widest">Portail Staff Historique</p>
             </div>
 
-            <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
+            <form id="login-form" class="space-y-4 relative z-10" onsubmit="handleLogin(event)">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Sélectionner un compte Staff</label>
-                    <select id="login-username" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" required>
+                    <select id="login-username" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-all font-medium" required>
                         <option value="" disabled selected>-- Choisissez votre profil --</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Mot de passe personnel</label>
-                    <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" required>
+                    <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-all font-medium" required>
                 </div>
 
-                <div id="login-error" class="text-rose-400 text-xs hidden bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl text-center"></div>
+                <div id="login-error" class="text-rose-400 text-xs hidden bg-rose-500/10 border border-rose-500/20 p-3 rounded-xl text-center font-medium"></div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-xl transition-all shadow-lg shadow-indigo-600/20 text-sm">
-                    Connexion au Portail
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/25 text-sm uppercase tracking-wider">
+                    Connexion
                 </button>
             </form>
 
-            <div class="mt-6 pt-6 border-t border-slate-800/60 text-center text-xs text-slate-500">
-                Synchronisé avec Cloud Persistence (JSONBin.io)
+            <div class="mt-6 pt-6 border-t border-valeraBorder text-center text-[11px] text-slate-500 font-medium">
+                Cloud Synchronized • JSONBin.io
             </div>
         </div>
     </div>
@@ -70,99 +71,101 @@
     <!-- MAIN APP CONTAINER -->
     <div id="app-container" class="hidden flex-col min-h-screen">
         <!-- HEADER -->
-        <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
-            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+        <header class="bg-valeraCard/80 backdrop-blur-md border-b border-valeraBorder sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/20">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white shadow-lg shadow-blue-600/25 text-lg">
                         V
                     </div>
                     <div>
-                        <span class="font-bold text-lg tracking-tight text-white">VALERA RP</span>
-                        <span class="text-xs block text-slate-400">Portail Staff</span>
+                        <span class="font-black text-lg tracking-wider text-white block">VALERA RP</span>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-blue-400 block">Staff System</span>
                     </div>
                 </div>
 
                 <!-- NAV TABS -->
-                <nav class="hidden md:flex space-x-1">
-                    <button onclick="switchTab('dashboard')" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors bg-indigo-600/10 text-indigo-400 border border-indigo-500/20" data-tab="dashboard">
-                        <i class="fa-solid fa-chart-pie mr-2"></i> Tableau de bord
+                <nav class="hidden md:flex space-x-1 bg-[#090a0f] p-1.5 rounded-xl border border-valeraBorder">
+                    <button onclick="switchTab('dashboard')" class="tab-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-md shadow-blue-600/20" data-tab="dashboard">
+                        <i class="fa-solid fa-chart-pie mr-2"></i> Dashboard
                     </button>
-                    <button onclick="switchTab('rulebook')" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800/50" data-tab="rulebook">
-                        <i class="fa-solid fa-book mr-2"></i> Règlement Staff
+                    <button onclick="switchTab('rulebook')" class="tab-btn px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="rulebook">
+                        <i class="fa-solid fa-book mr-2"></i> Règlement
                     </button>
-                    <button onclick="switchTab('bareme')" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800/50" data-tab="bareme">
-                        <i class="fa-solid fa-gavel mr-2"></i> Barème Sanctions
+                    <button onclick="switchTab('bareme')" class="tab-btn px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="bareme">
+                        <i class="fa-solid fa-gavel mr-2"></i> Barème
                     </button>
-                    <button onclick="switchTab('tickets')" class="tab-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white hover:bg-slate-800/50" data-tab="tickets">
-                        <i class="fa-solid fa-ticket mr-2"></i> Réponses Tickets
+                    <button onclick="switchTab('tickets')" class="tab-btn px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="tickets">
+                        <i class="fa-solid fa-ticket mr-2"></i> Tickets
                     </button>
-                    <button id="admin-nav-btn" onclick="switchTab('admin')" class="hidden tab-btn px-4 py-2 rounded-xl text-sm font-medium transition-colors text-amber-400 hover:bg-amber-500/10 border border-amber-500/20" data-tab="admin">
-                        <i class="fa-solid fa-shield-halved mr-2"></i> Panel Admin
+                    <button id="admin-nav-btn" onclick="switchTab('admin')" class="hidden tab-btn px-4 py-2 rounded-lg text-xs font-bold transition-all text-amber-400 hover:bg-amber-500/10 border border-amber-500/20" data-tab="admin">
+                        <i class="fa-solid fa-shield-halved mr-2"></i> Panel Admin R2
                     </button>
                 </nav>
 
                 <!-- USER PROFILE & LOGOUT -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-3">
                     <div class="text-right hidden sm:block">
-                        <span id="current-user-name" class="block text-sm font-semibold text-white"></span>
-                        <span id="current-user-role" class="text-xs text-indigo-400"></span>
+                        <span id="current-user-name" class="block text-sm font-bold text-white"></span>
+                        <span id="current-user-role" class="text-[10px] font-bold text-blue-400 uppercase tracking-wider"></span>
                     </div>
-                    <button onclick="handleLogout()" class="bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 hover:border-rose-500/30 border border-slate-700 text-slate-300 px-3 py-2 rounded-xl text-sm transition-all" title="Se déconnecter">
-                        <i class="fa-solid fa-power-off"></i>
+                    <button onclick="handleLogout()" class="w-10 h-10 rounded-xl bg-valeraCard hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 border border-valeraBorder text-slate-400 flex items-center justify-center transition-all" title="Se déconnecter">
+                        <i class="fa-solid fa-power-off text-sm"></i>
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- MOBILE NAV -->
-        <div class="md:hidden bg-slate-900 border-b border-slate-800 px-4 py-2 flex space-x-1 overflow-x-auto">
-            <button onclick="switchTab('dashboard')" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-indigo-600/10 text-indigo-400" data-tab="dashboard">Dashboard</button>
-            <button onclick="switchTab('rulebook')" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap text-slate-400" data-tab="rulebook">Règlement</button>
-            <button onclick="switchTab('bareme')" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap text-slate-400" data-tab="bareme">Barème</button>
-            <button onclick="switchTab('tickets')" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap text-slate-400" data-tab="tickets">Tickets</button>
-            <button id="admin-nav-btn-mobile" onclick="switchTab('admin')" class="hidden tab-btn px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap text-amber-400">Admin</button>
+        <div class="md:hidden bg-valeraCard border-b border-valeraBorder px-4 py-2 flex space-x-2 overflow-x-auto">
+            <button onclick="switchTab('dashboard')" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-blue-600 text-white" data-tab="dashboard">Dashboard</button>
+            <button onclick="switchTab('rulebook')" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="rulebook">Règlement</button>
+            <button onclick="switchTab('bareme')" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="bareme">Barème</button>
+            <button onclick="switchTab('tickets')" class="tab-btn px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="tickets">Tickets</button>
+            <button id="admin-nav-btn-mobile" onclick="switchTab('admin')" class="hidden tab-btn px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-amber-400 bg-amber-500/10">Admin R2</button>
         </div>
 
         <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
+        <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 space-y-8">
 
             <!-- TAB 1: DASHBOARD -->
             <div id="tab-dashboard" class="tab-content space-y-6">
-                <div class="bg-gradient-to-r from-indigo-900/40 via-slate-900 to-slate-900 border border-indigo-500/20 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                    <div class="absolute right-0 top-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-                    <h2 class="text-2xl font-bold text-white mb-2">Bienvenue sur VALERA RP, <span id="welcome-name" class="text-indigo-400"></span> !</h2>
-                    <p class="text-sm text-slate-300 max-w-2xl">Portail de gestion unifié pour l'équipe administrative. Retrouvez ici le barème des sanctions officiel, les 23 modèles de tickets et l'intégralité du règlement staff synchronisés en temps réel.</p>
+                <div class="bg-gradient-to-r from-blue-950/60 via-valeraCard to-valeraCard border border-blue-500/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                    <h2 class="text-3xl font-black text-white mb-2">Bienvenue sur VALERA RP, <span id="welcome-name" class="text-blue-400"></span> !</h2>
+                    <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">Portail historique officiel de l'équipe administrative. Retrouvez ici vos avertissements personnels, l'intégralité du règlement et les outils de gestion du serveur.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-slate-400 text-sm font-medium">Membres du Staff</span>
-                            <div class="w-10 h-10 rounded-xl bg-indigo-600/10 text-indigo-400 flex items-center justify-center font-bold">17</div>
+                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Membres Staff</span>
+                            <div class="w-10 h-10 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-sm border border-blue-500/20">17</div>
                         </div>
-                        <p class="text-2xl font-bold text-white">17 Actifs</p>
-                        <p class="text-xs text-slate-500 mt-1">Comptes sécurisés configurés</p>
+                        <p class="text-2xl font-black text-white">17 Actifs</p>
+                        <p class="text-xs text-slate-500 mt-1">Comptes configurés</p>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-slate-400 text-sm font-medium">Articles du Règlement</span>
-                            <div class="w-10 h-10 rounded-xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold">11</div>
+                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Articles Règlement</span>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">11</div>
                         </div>
-                        <p class="text-2xl font-bold text-white">11 Articles</p>
-                        <p class="text-xs text-slate-500 mt-1">Intégralité des chapitres détaillés</p>
+                        <p class="text-2xl font-black text-white">11 Chapitres</p>
+                        <p class="text-xs text-slate-500 mt-1">À jour en permanence</p>
                     </div>
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                    <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-slate-400 text-sm font-medium">Modèles de Tickets</span>
-                            <div class="w-10 h-10 rounded-xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold">23</div>
+                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Modèles Tickets</span>
+                            <div class="w-10 h-10 rounded-xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20">23</div>
                         </div>
-                        <p class="text-2xl font-bold text-white">23 Modèles</p>
-                        <p class="text-xs text-slate-500 mt-1">Prêts à l'emploi en un clic</p>
+                        <p class="text-2xl font-black text-white">23 Modèles</p>
+                        <p class="text-xs text-slate-500 mt-1">Prêts à l'emploi</p>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold text-white mb-4"><i class="fa-solid fa-list-check mr-2 text-indigo-400"></i> Mes Sanctions Personnelles & Suivi</h3>
+                <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center">
+                        <i class="fa-solid fa-shield-cat mr-2.5 text-blue-400"></i> Mes Sanctions Personnelles & Suivi
+                    </h3>
                     <div id="my-sanctions-container" class="space-y-3">
                         <p class="text-slate-400 text-sm italic">Aucun avertissement ou sanction enregistré dans votre dossier.</p>
                     </div>
@@ -171,11 +174,9 @@
 
             <!-- TAB 2: RULEBOOK -->
             <div id="tab-rulebook" class="tab-content hidden space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white">Règlement Interne VALERA RP</h2>
-                        <p class="text-sm text-slate-400">L'intégralité des 11 articles régissant l'équipe administrative.</p>
-                    </div>
+                <div>
+                    <h2 class="text-2xl font-black text-white">Règlement Interne VALERA RP</h2>
+                    <p class="text-sm text-slate-400 mt-1">L'intégralité des articles régissant l'équipe administrative.</p>
                 </div>
                 <div id="rulebook-container" class="space-y-4">
                     <!-- Dynamic Rulebook Articles -->
@@ -186,24 +187,24 @@
             <div id="tab-bareme" class="tab-content hidden space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-bold text-white">Barème Officiel des Sanctions</h2>
-                        <p class="text-sm text-slate-400">Recherchez instantanément un motif et sa sanction associée.</p>
+                        <h2 class="text-2xl font-black text-white">Barème Officiel des Sanctions</h2>
+                        <p class="text-sm text-slate-400 mt-1">Recherchez instantanément un motif et sa sanction associée.</p>
                     </div>
-                    <div class="relative w-full sm:w-72">
+                    <div class="relative w-full sm:w-80">
                         <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-                        <input type="text" id="bareme-search" oninput="filterBareme()" placeholder="Rechercher un motif..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-11 pr-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500">
+                        <input type="text" id="bareme-search" oninput="filterBareme()" placeholder="Rechercher un motif..." class="w-full bg-valeraCard border border-valeraBorder rounded-xl pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 shadow-inner">
                     </div>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div class="bg-valeraCard border border-valeraBorder rounded-2xl overflow-hidden shadow-2xl">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-slate-950/60 border-b border-slate-800 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                                    <th class="p-4">Motif / Infraction</th>
-                                    <th class="p-4">Sanction Appliquée</th>
+                                <tr class="bg-[#090a0f]/60 border-b border-valeraBorder text-xs font-bold uppercase tracking-wider text-slate-400">
+                                    <th class="p-5">Motif / Infraction</th>
+                                    <th class="p-5">Sanction Appliquée</th>
                                 </tr>
                             </thead>
-                            <tbody id="bareme-tbody" class="divide-y divide-slate-800/60 text-sm">
+                            <tbody id="bareme-tbody" class="divide-y divide-valeraBorder text-sm font-medium">
                                 <!-- Dynamic rows -->
                             </tbody>
                         </table>
@@ -213,49 +214,103 @@
 
             <!-- TAB 4: TICKETS -->
             <div id="tab-tickets" class="tab-content hidden space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white">Modèles de Réponses Tickets (23)</h2>
-                        <p class="text-sm text-slate-400">Cliquez sur un modèle pour le copier instantanément dans votre presse-papiers.</p>
-                    </div>
+                <div>
+                    <h2 class="text-2xl font-black text-white">Modèles de Réponses Tickets</h2>
+                    <p class="text-sm text-slate-400 mt-1">Cliquez sur un modèle pour le copier instantanément dans votre presse-papiers.</p>
                 </div>
                 <div id="tickets-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Dynamic Ticket Responses -->
                 </div>
             </div>
 
-            <!-- TAB 5: ADMIN PANEL -->
-            <div id="tab-admin" class="tab-content hidden space-y-6">
-                <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6">
-                    <h2 class="text-xl font-bold text-amber-400 mb-2"><i class="fa-solid fa-shield-halved mr-2"></i> Panel d'Administration Super Admin</h2>
-                    <p class="text-sm text-slate-300">Gérez les comptes staff, attribuez des avertissements (strikes) et modifiez les articles du règlement en direct sur JSONBin.io.</p>
+            <!-- TAB 5: ADMIN PANEL R2 -->
+            <div id="tab-admin" class="tab-content hidden space-y-8">
+                <div class="bg-gradient-to-r from-amber-500/15 via-valeraCard to-valeraCard border border-amber-500/30 rounded-2xl p-6 shadow-2xl">
+                    <h2 class="text-xl font-black text-amber-400 mb-1 flex items-center">
+                        <i class="fa-solid fa-shield-halved mr-2.5"></i> Panel d'Administration R2 (Contrôle Total)
+                    </h2>
+                    <p class="text-sm text-slate-300">Modifiez absolument tout en direct sur le cloud : attribuez ou retirez le rôle <strong>Super Admin</strong> à n'importe quel staff, gérez les articles, modifiez le barème et les tickets.</p>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Staff Management -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <h3 class="text-lg font-semibold text-white mb-4"><i class="fa-solid fa-users-gear mr-2 text-indigo-400"></i> Gestion des Comptes & Sanctions Staff</h3>
-                        <div class="space-y-4" id="admin-staff-list">
-                            <!-- Dynamic staff management items -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- 1. Staff Management & Super Admin toggle -->
+                    <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-users-gear mr-2.5 text-blue-400"></i> Gestion des Comptes & Droits Super Admin
+                        </h3>
+                        <div class="space-y-3 max-h-[420px] overflow-y-auto pr-2" id="admin-staff-list"></div>
+                    </div>
+
+                    <!-- 2. Rulebook Editor -->
+                    <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-book-bookmark mr-2.5 text-blue-400"></i> Éditer / Ajouter un Article du Règlement
+                        </h3>
+                        <form onsubmit="handleSaveNewArticle(event)" class="space-y-3.5">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'Article</label>
+                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu / Texte</label>
+                                <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium leading-relaxed" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
+                                + Ajouter l'Article
+                            </button>
+                        </form>
+                        <div class="pt-4 border-t border-valeraBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels (Suppression)</h4>
+                            <div class="space-y-2 max-h-[120px] overflow-y-auto" id="admin-rulebook-list"></div>
                         </div>
                     </div>
 
-                    <!-- Rulebook Editor -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                        <h3 class="text-lg font-semibold text-white mb-4"><i class="fa-solid fa-pen-to-square mr-2 text-indigo-400"></i> Éditeur d'Articles du Règlement</h3>
-                        <form onsubmit="handleSaveNewArticle(event)" class="space-y-4">
+                    <!-- 3. Bareme Editor -->
+                    <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-gavel mr-2.5 text-blue-400"></i> Gérer le Barème des Sanctions
+                        </h3>
+                        <form onsubmit="handleSaveNewBareme(event)" class="space-y-3.5">
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Titre de l'Article</label>
-                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" required>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Motif / Infraction</label>
+                                <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Contenu / Texte</label>
-                                <textarea id="new-article-text" rows="5" placeholder="Contenu de l'article..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500" required></textarea>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sanction Appliquée</label>
+                                <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
                             </div>
-                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition-all text-sm">
-                                Ajouter / Mettre à jour l'Article
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
+                                + Ajouter au Barème
                             </button>
                         </form>
+                        <div class="pt-4 border-t border-valeraBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel (Suppression)</h4>
+                            <div class="space-y-2 max-h-[120px] overflow-y-auto" id="admin-bareme-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Ticket Response Editor -->
+                    <div class="bg-valeraCard border border-valeraBorder rounded-2xl p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-ticket mr-2.5 text-blue-400"></i> Gérer les Modèles de Tickets
+                        </h3>
+                        <form onsubmit="handleSaveNewTicket(event)" class="space-y-3.5">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre du Modèle</label>
+                                <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Texte de la Réponse</label>
+                                <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-[#090a0f] border border-valeraBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-medium leading-relaxed" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-sm">
+                                + Ajouter le Modèle
+                            </button>
+                        </form>
+                        <div class="pt-4 border-t border-valeraBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels (Suppression)</h4>
+                            <div class="space-y-2 max-h-[120px] overflow-y-auto" id="admin-ticket-list"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -264,9 +319,9 @@
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 border border-indigo-500/30 text-white px-5 py-3 rounded-xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3">
-        <i class="fa-solid fa-circle-check text-indigo-400 text-lg"></i>
-        <span id="toast-msg" class="text-sm font-medium">Copié dans le presse-papiers !</span>
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-valeraCard border border-blue-500/30 text-white px-5 py-3.5 rounded-xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3">
+        <i class="fa-solid fa-circle-check text-blue-400 text-lg"></i>
+        <span id="toast-msg" class="text-sm font-semibold">Copié dans le presse-papiers !</span>
     </div>
 
     <!-- SCRIPT APPLICATION -->
@@ -343,7 +398,6 @@
             document.getElementById('app-container').classList.remove('hidden');
             document.getElementById('app-container').classList.add('flex');
 
-            // Set user info
             document.getElementById('current-user-name').textContent = currentUser.name;
             document.getElementById('current-user-role').textContent = currentUser.isSuperAdmin ? 'Super Administrateur' : 'Membre Staff';
             document.getElementById('welcome-name').textContent = currentUser.name;
@@ -370,12 +424,12 @@
             document.getElementById(`tab-${tabName}`).classList.remove('hidden');
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-indigo-600/10', 'text-indigo-400', 'border', 'border-indigo-500/20');
-                btn.classList.add('text-slate-400');
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
+                btn.classList.add('text-slate-400', 'bg-white/5');
             });
             document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(btn => {
-                btn.classList.add('bg-indigo-600/10', 'text-indigo-400', 'border', 'border-indigo-500/20');
-                btn.classList.remove('text-slate-400');
+                btn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20');
+                btn.classList.remove('text-slate-400', 'bg-white/5');
             });
 
             if (tabName === 'admin') renderAdminPanel();
@@ -395,10 +449,10 @@
                 return;
             }
             container.innerHTML = dbData.staffPersonalSanctions[currentUser.name].map((s, idx) => `
-                <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+                <div class="bg-[#090a0f] border border-valeraBorder p-4 rounded-xl flex items-center justify-between">
                     <div>
-                        <span class="text-xs font-semibold px-2.5 py-1 bg-rose-500/10 text-rose-400 rounded-lg mr-2">Sanction #${idx + 1}</span>
-                        <span class="text-sm font-medium text-white">${s}</span>
+                        <span class="text-xs font-bold px-3 py-1 bg-rose-500/10 text-rose-400 rounded-lg mr-3 border border-rose-500/20">Sanction #${idx + 1}</span>
+                        <span class="text-sm font-semibold text-white">${s}</span>
                     </div>
                 </div>
             `).join('');
@@ -407,12 +461,14 @@
         function renderRulebook() {
             const container = document.getElementById('rulebook-container');
             container.innerHTML = dbData.staffParts.map((art, idx) => `
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-                    <button onclick="toggleArticle(${idx})" class="w-full px-6 py-4 text-left font-semibold text-white flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                <div class="bg-valeraCard border border-valeraBorder rounded-2xl overflow-hidden shadow-xl">
+                    <button onclick="toggleArticle(${idx})" class="w-full px-6 py-5 text-left font-bold text-white flex items-center justify-between hover:bg-white/5 transition-colors">
                         <span>${art.title}</span>
-                        <i id="art-icon-${idx}" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
+                        <div class="w-8 h-8 rounded-xl bg-[#090a0f] flex items-center justify-center border border-valeraBorder text-slate-400">
+                            <i id="art-icon-${idx}" class="fa-solid fa-chevron-down transition-transform"></i>
+                        </div>
                     </button>
-                    <div id="art-content-${idx}" class="hidden px-6 pb-6 pt-2 text-sm text-slate-300 border-t border-slate-800/60 whitespace-pre-line leading-relaxed">
+                    <div id="art-content-${idx}" class="hidden px-6 pb-6 pt-2 text-sm text-slate-300 border-t border-valeraBorder whitespace-pre-line leading-relaxed">
                         ${art.text}
                     </div>
                 </div>
@@ -429,9 +485,9 @@
         function renderBareme() {
             const tbody = document.getElementById('bareme-tbody');
             tbody.innerHTML = dbData.sanctionsData.map(item => `
-                <tr class="hover:bg-slate-800/30 transition-colors border-b border-slate-800/40">
-                    <td class="p-4 font-medium text-white">${item.motif}</td>
-                    <td class="p-4 text-indigo-400 font-semibold">${item.sanction}</td>
+                <tr class="hover:bg-white/[0.02] transition-colors border-b border-valeraBorder">
+                    <td class="p-5 font-bold text-white">${item.motif}</td>
+                    <td class="p-5 text-blue-400 font-extrabold">${item.sanction}</td>
                 </tr>
             `).join('');
         }
@@ -448,12 +504,14 @@
         function renderTickets() {
             const container = document.getElementById('tickets-container');
             container.innerHTML = dbData.ticketResponses.map(t => `
-                <div onclick="copyToClipboard('${t.text.replace(/'/g, "\\'")}')" class="bg-slate-900 border border-slate-800 hover:border-indigo-500/50 rounded-2xl p-5 cursor-pointer transition-all shadow-lg hover:shadow-indigo-500/10 group">
-                    <h4 class="font-semibold text-white mb-2 group-hover:text-indigo-400 transition-colors flex items-center justify-between">
+                <div onclick="copyToClipboard('${t.text.replace(/'/g, "\\'")}')" class="bg-valeraCard border border-valeraBorder hover:border-blue-500/50 rounded-2xl p-6 cursor-pointer transition-all shadow-xl hover:shadow-blue-500/10 group">
+                    <h4 class="font-bold text-white mb-3 group-hover:text-blue-400 transition-colors flex items-center justify-between">
                         <span>${t.title}</span>
-                        <i class="fa-regular fa-copy text-slate-500 group-hover:text-indigo-400"></i>
+                        <div class="w-8 h-8 rounded-xl bg-[#090a0f] flex items-center justify-center border border-valeraBorder text-slate-500 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-all">
+                            <i class="fa-regular fa-copy text-xs"></i>
+                        </div>
                     </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed bg-slate-950 p-3 rounded-xl border border-slate-800/60">${t.text}</p>
+                    <p class="text-xs text-slate-400 leading-relaxed bg-[#090a0f] p-4 rounded-xl border border-valeraBorder/60 font-medium">${t.text}</p>
                 </div>
             `).join('');
         }
@@ -478,23 +536,63 @@
         }
 
         function renderAdminPanel() {
-            const list = document.getElementById('admin-staff-list');
-            list.innerHTML = dbData.staffAccounts.map(acc => `
-                <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+            // 1. Staff List & Super Admin Toggles
+            const staffList = document.getElementById('admin-staff-list');
+            staffList.innerHTML = dbData.staffAccounts.map((acc, index) => `
+                <div class="bg-[#090a0f] border border-valeraBorder p-3.5 rounded-xl flex items-center justify-between">
                     <div>
-                        <span class="font-medium text-white">${acc.name}</span>
-                        <span class="text-xs ml-2 px-2 py-0.5 rounded-md ${acc.isSuperAdmin ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-indigo-600/10 text-indigo-400'}">${acc.isSuperAdmin ? 'Super Admin' : 'Staff'}</span>
-                        <div class="text-xs text-slate-400 mt-1">Sanctions: ${(dbData.staffPersonalSanctions[acc.name] || []).length}</div>
+                        <span class="font-bold text-white text-sm">${acc.name}</span>
+                        <div class="text-[11px] text-slate-400 mt-0.5">Strikes: ${(dbData.staffPersonalSanctions[acc.name] || []).length}</div>
                     </div>
-                    <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-3 py-1.5 rounded-lg text-xs font-medium transition-all">
-                        + Ajouter un Strike
-                    </button>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="toggleSuperAdmin(${index})" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${acc.isSuperAdmin ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+                            ${acc.isSuperAdmin ? '👑 Super Admin' : 'Staff Simple'}
+                        </button>
+                        <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all" title="Ajouter Strike">
+                            + Strike
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // 2. Rulebook List for deletion
+            const ruleList = document.getElementById('admin-rulebook-list');
+            ruleList.innerHTML = dbData.staffParts.map((art, idx) => `
+                <div class="bg-[#090a0f] border border-valeraBorder p-2.5 rounded-xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[200px]">${art.title}</span>
+                    <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+
+            // 3. Bareme List for deletion
+            const baremeList = document.getElementById('admin-bareme-list');
+            baremeList.innerHTML = dbData.sanctionsData.map((item, idx) => `
+                <div class="bg-[#090a0f] border border-valeraBorder p-2.5 rounded-xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[200px]">${item.motif}</span>
+                    <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+
+            // 4. Ticket List for deletion
+            const ticketList = document.getElementById('admin-ticket-list');
+            ticketList.innerHTML = dbData.ticketResponses.map((t, idx) => `
+                <div class="bg-[#090a0f] border border-valeraBorder p-2.5 rounded-xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[200px]">${t.title}</span>
+                    <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2 py-1"><i class="fa-solid fa-trash"></i></button>
                 </div>
             `).join('');
         }
 
+        async function toggleSuperAdmin(index) {
+            dbData.staffAccounts[index].isSuperAdmin = !dbData.staffAccounts[index].isSuperAdmin;
+            await saveCloudData();
+            renderAdminPanel();
+            initLoginDropdown();
+            showToast(`Droits modifiés pour ${dbData.staffAccounts[index].name} !`);
+        }
+
         async function promptAddSanction(staffName) {
-            const reason = prompt(`Entrer le motif de la sanction / strike pour ${staffName} :`);
+            const reason = prompt(`Entrer le motif du strike pour ${staffName} :`);
             if (!reason) return;
             if (!dbData.staffPersonalSanctions[staffName]) {
                 dbData.staffPersonalSanctions[staffName] = [];
@@ -509,13 +607,66 @@
             e.preventDefault();
             const title = document.getElementById('new-article-title').value;
             const text = document.getElementById('new-article-text').value;
-
             dbData.staffParts.push({ title, text });
             await saveCloudData();
             document.getElementById('new-article-title').value = '';
             document.getElementById('new-article-text').value = '';
             renderRulebook();
-            showToast("Article ajouté avec succès !");
+            renderAdminPanel();
+            showToast("Article ajouté au cloud !");
+        }
+
+        async function deleteArticle(idx) {
+            if (!confirm("Voulez-vous vraiment supprimer cet article ?")) return;
+            dbData.staffParts.splice(idx, 1);
+            await saveCloudData();
+            renderRulebook();
+            renderAdminPanel();
+            showToast("Article supprimé !");
+        }
+
+        async function handleSaveNewBareme(e) {
+            e.preventDefault();
+            const motif = document.getElementById('new-bareme-motif').value;
+            const sanction = document.getElementById('new-bareme-sanction').value;
+            dbData.sanctionsData.push({ motif, sanction });
+            await saveCloudData();
+            document.getElementById('new-bareme-motif').value = '';
+            document.getElementById('new-bareme-sanction').value = '';
+            renderBareme();
+            renderAdminPanel();
+            showToast("Barème mis à jour !");
+        }
+
+        async function deleteBareme(idx) {
+            if (!confirm("Supprimer cette ligne du barème ?")) return;
+            dbData.sanctionsData.splice(idx, 1);
+            await saveCloudData();
+            renderBareme();
+            renderAdminPanel();
+            showToast("Ligne supprimée !");
+        }
+
+        async function handleSaveNewTicket(e) {
+            e.preventDefault();
+            const title = document.getElementById('new-ticket-title').value;
+            const text = document.getElementById('new-ticket-text').value;
+            dbData.ticketResponses.push({ title, text });
+            await saveCloudData();
+            document.getElementById('new-ticket-title').value = '';
+            document.getElementById('new-ticket-text').value = '';
+            renderTickets();
+            renderAdminPanel();
+            showToast("Modèle de ticket ajouté !");
+        }
+
+        async function deleteTicket(idx) {
+            if (!confirm("Supprimer ce modèle de ticket ?")) return;
+            dbData.ticketResponses.splice(idx, 1);
+            await saveCloudData();
+            renderTickets();
+            renderAdminPanel();
+            showToast("Modèle supprimé !");
         }
     </script>
 </body>
