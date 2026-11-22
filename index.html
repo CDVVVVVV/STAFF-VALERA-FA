@@ -319,14 +319,14 @@
                     <h2 class="text-2xl font-extrabold text-amber-400 mb-2 flex items-center">
                         <i class="fa-solid fa-shield-halved mr-3"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : visualisez et modifiez les mots de passe des membres, révoquez leurs accès, gérez les sanctions, les idées et le règlement.</p>
+                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : visualisez les connexions et temps de présence, modérez les comptes, les sanctions, les idées et le règlement.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- 1. Staff Management (Mots de passe visibles & modifiables, Rôles, Strikes & Révocation) -->
+                    <!-- 1. Staff Management (Connexions, Temps passé, Mots de passe, Strikes) -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-users-gear mr-3 text-rose-400"></i> Gestion du Staff & Mots de Passe
+                            <i class="fa-solid fa-users-gear mr-3 text-rose-400"></i> Gestion du Staff & Activité
                         </h3>
                         <div class="space-y-3 max-h-[480px] overflow-y-auto pr-2 custom-scrollbar" id="admin-staff-list"></div>
                     </div>
@@ -465,6 +465,7 @@
         let dbData = null;
         let currentUser = null;
         let isMusicPlaying = false;
+        let timeInterval = null;
 
         window.addEventListener('DOMContentLoaded', async () => {
             await fetchCloudData();
@@ -502,6 +503,7 @@
                 dbData = json.record;
                 if (!dbData.ideas) dbData.ideas = [];
                 if (!dbData.staffPersonalSanctions) dbData.staffPersonalSanctions = {};
+                if (!dbData.staffStats) dbData.staffStats = {};
             } catch (err) {
                 console.error("Erreur chargement cloud:", err);
                 alert("Erreur de connexion au cloud JSONBin.io.");
@@ -537,7 +539,7 @@
             });
         }
 
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value;
             const password = document.getElementById('login-password').value;
@@ -551,6 +553,29 @@
             }
 
             currentUser = account;
+
+            // Incrémenter les connexions et initialiser les stats si besoin
+            if (!dbData.staffStats) dbData.staffStats = {};
+            if (!dbData.staffStats[currentUser.name]) {
+                dbData.staffStats[currentUser.name] = { logins: 0, seconds: 0 };
+            }
+            dbData.staffStats[currentUser.name].logins += 1;
+            await saveCloudData();
+
+            // Lancer le compteur de temps passé (toutes les secondes)
+            if (timeInterval) clearInterval(timeInterval);
+            timeInterval = setInterval(async () => {
+                if (currentUser) {
+                    if (!dbData.staffStats[currentUser.name]) {
+                        dbData.staffStats[currentUser.name] = { logins: 1, seconds: 0 };
+                    }
+                    dbData.staffStats[currentUser.name].seconds += 1;
+                    // Sauvegarde sur le cloud toutes les 30 secondes pour éviter le spam réseau
+                    if (dbData.staffStats[currentUser.name].seconds % 30 === 0) {
+                        await saveCloudData();
+                    }
+                }
+            }, 1000);
             
             const audio = document.getElementById('xmas-audio');
             audio.play().then(() => {
@@ -575,7 +600,11 @@
             renderApp();
         }
 
-        function handleLogout() {
+        async function handleLogout() {
+            if (currentUser) {
+                await saveCloudData(); // Sauvegarde finale du temps
+            }
+            if (timeInterval) clearInterval(timeInterval);
             currentUser = null;
             document.getElementById('xmas-audio').pause();
             isMusicPlaying = false;
@@ -815,12 +844,29 @@
             showToast("Idée supprimée !");
         }
 
+        // Fonction pour formetter le temps en Heures / Minutes / Secondes
+        function formatTime(totalSeconds) {
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = totalSeconds % 60;
+            if (h > 0) {
+                return `${h}h ${m}m ${s}s`;
+            } else if (m > 0) {
+                return `${m}m ${s}s`;
+            } else {
+                return `${s}s`;
+            }
+        }
+
         // --- PANEL ADMIN ---
         function renderAdminPanel() {
-            // 1. Staff Management with Visible / Editable Passwords
+            // 1. Staff Management (Connexions, Temps passé, Mots de passe, Strikes)
             const staffList = document.getElementById('admin-staff-list');
             staffList.innerHTML = dbData.staffAccounts.map((acc, index) => {
                 const sanctions = (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[acc.name]) || [];
+                const stats = (dbData.staffStats && dbData.staffStats[acc.name]) || { logins: 0, seconds: 0 };
+                const formattedTime = formatTime(stats.seconds);
+
                 return `
                     <div class="bg-xmasBg border border-xmasBorder p-4 rounded-2xl space-y-3">
                         <div class="flex items-center justify-between">
@@ -835,6 +881,12 @@
                                 <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all" title="Ajouter Strike">+ Strike</button>
                                 <button onclick="kickStaff('${acc.name}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all" title="Virer le membre"><i class="fa-solid fa-user-slash"></i></button>
                             </div>
+                        </div>
+
+                        <!-- STATS DE CONNEXION & TEMPS PASSÉ (SOUS LES STRIKES) -->
+                        <div class="flex items-center justify-between bg-xmasCard/70 border border-xmasBorder px-3 py-2 rounded-xl text-xs">
+                            <span class="text-slate-300 flex items-center"><i class="fa-solid fa-right-to-bracket text-emerald-400 mr-1.5"></i> Connexions : <strong class="text-white ml-1">${stats.logins}</strong></span>
+                            <span class="text-slate-300 flex items-center"><i class="fa-regular fa-clock text-amber-400 mr-1.5"></i> Temps : <strong class="text-white ml-1">${formattedTime}</strong></span>
                         </div>
 
                         <!-- MODIFICATION DU MOT DE PASSE EN DIRECT -->
@@ -943,6 +995,9 @@
             dbData.staffAccounts = dbData.staffAccounts.filter(acc => acc.name !== staffName);
             if (dbData.staffPersonalSanctions[staffName]) {
                 delete dbData.staffPersonalSanctions[staffName];
+            }
+            if (dbData.staffStats && dbData.staffStats[staffName]) {
+                delete dbData.staffStats[staffName];
             }
             await saveCloudData();
             renderAdminPanel();
