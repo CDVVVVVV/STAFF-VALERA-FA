@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALERA RP | Portail Staff Ultimate Violet</title>
+    <title>VALERA RP | Portail Staff Nexus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,9 +11,9 @@
             theme: {
                 extend: {
                     colors: {
-                        valeraBg: '#080614',
-                        valeraCard: '#120f24',
-                        valeraBorder: '#231e3d',
+                        valeraBg: '#070510',
+                        valeraCard: '#100d22',
+                        valeraBorder: '#1f1a3a',
                         valeraAccent: '#8b5cf6',
                         valeraAccentHover: '#7c3aed'
                     }
@@ -25,48 +25,50 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-panel { background: rgba(18, 15, 36, 0.75); backdrop-filter: blur(16px); }
-        .glow-effect { box-shadow: 0 0 40px -10px rgba(139, 92, 246, 0.25); }
+        .glass-panel { background: rgba(16, 13, 34, 0.8); backdrop-filter: blur(20px); }
+        .glow-box { box-shadow: 0 0 50px -12px rgba(139, 92, 246, 0.3); }
+        .glow-card:hover { box-shadow: 0 0 30px -5px rgba(139, 92, 246, 0.2); transform: translateY(-2px); }
+        transition-all-custom { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="bg-valeraBg text-slate-100 min-h-screen flex flex-col selection:bg-purple-500 selection:text-white">
 
     <!-- LOGIN OVERLAY -->
-    <div id="login-modal" class="fixed inset-0 z-50 bg-[#080614]/95 backdrop-blur-2xl flex items-center justify-center p-4">
-        <div class="bg-valeraCard border border-valeraBorder rounded-3xl w-full max-w-md p-8 shadow-2xl relative overflow-hidden glow-effect">
+    <div id="login-modal" class="fixed inset-0 z-50 bg-[#070510]/95 backdrop-blur-2xl flex items-center justify-center p-4">
+        <div class="bg-valeraCard border border-valeraBorder rounded-3xl w-full max-w-md p-8 shadow-2xl relative overflow-hidden glow-box">
             <div class="absolute -top-32 -right-32 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
             
             <div class="text-center mb-8 relative z-10">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white text-2xl mb-4 font-black shadow-lg shadow-purple-600/30">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white text-2xl mb-4 font-black shadow-xl shadow-purple-600/30 animate-pulse">
                     V
                 </div>
                 <h1 class="text-2xl font-extrabold tracking-tight text-white">VALERA RP</h1>
-                <p class="text-xs font-semibold text-purple-400 mt-1 uppercase tracking-widest">Portail Staff Sécurisé</p>
+                <p class="text-xs font-semibold text-purple-400 mt-1 uppercase tracking-widest">Portail Staff Nexus</p>
             </div>
 
             <form id="login-form" class="space-y-4 relative z-10" onsubmit="handleLogin(event)">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Sélectionner un compte Staff</label>
-                    <select id="login-username" class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-purple-500 transition-all font-medium" required>
+                    <select id="login-username" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-purple-500 transition-all font-medium" required>
                         <option value="" disabled selected>-- Choisissez votre profil --</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Mot de passe personnel</label>
-                    <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-purple-500 transition-all font-medium" required>
+                    <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-purple-500 transition-all font-medium" required>
                 </div>
 
                 <div id="login-error" class="text-rose-400 text-xs hidden bg-rose-500/10 border border-rose-500/20 p-3 rounded-2xl text-center font-medium"></div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-xl shadow-purple-600/25 text-sm uppercase tracking-wider">
-                    Connexion
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-xl shadow-purple-600/25 text-sm uppercase tracking-wider transform hover:-translate-y-0.5">
+                    Connexion Sécurisée
                 </button>
             </form>
 
             <div class="mt-6 pt-6 border-t border-valeraBorder text-center text-[11px] text-slate-500 font-medium">
-                Cloud Synchronized • JSONBin.io
+                Cloud Synchronized • JSONBin.io Nexus
             </div>
         </div>
     </div>
@@ -82,12 +84,12 @@
                     </div>
                     <div>
                         <span class="font-extrabold text-lg tracking-tight text-white block">VALERA RP</span>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-purple-400 block">Staff System</span>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-purple-400 block">Nexus System</span>
                     </div>
                 </div>
 
-                <!-- NAV TABS -->
-                <nav class="hidden md:flex space-x-1.5 bg-[#080614] p-1.5 rounded-2xl border border-valeraBorder">
+                <!-- NAV TABS (Desktop) -->
+                <nav class="hidden lg:flex space-x-1.5 bg-[#070510] p-1.5 rounded-2xl border border-valeraBorder">
                     <button onclick="switchTab('dashboard')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all bg-purple-600 text-white shadow-md shadow-purple-600/25" data-tab="dashboard">
                         <i class="fa-solid fa-chart-pie mr-2"></i> Dashboard
                     </button>
@@ -100,8 +102,11 @@
                     <button onclick="switchTab('tickets')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="tickets">
                         <i class="fa-solid fa-ticket mr-2"></i> Tickets
                     </button>
+                    <button onclick="switchTab('ideas')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="ideas">
+                        <i class="fa-solid fa-lightbulb mr-2 text-amber-400"></i> Idées & Votes
+                    </button>
                     <button id="admin-nav-btn" onclick="switchTab('admin')" class="hidden tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-amber-400 hover:bg-amber-500/10 border border-amber-500/20" data-tab="admin">
-                        <i class="fa-solid fa-shield-halved mr-2"></i> Panel Admin R2
+                        <i class="fa-solid fa-shield-halved mr-2"></i> Panel Admin
                     </button>
                 </nav>
 
@@ -119,12 +124,13 @@
         </header>
 
         <!-- MOBILE NAV -->
-        <div class="md:hidden bg-valeraCard border-b border-valeraBorder px-4 py-2.5 flex space-x-2 overflow-x-auto">
+        <div class="lg:hidden bg-valeraCard border-b border-valeraBorder px-4 py-2.5 flex space-x-2 overflow-x-auto">
             <button onclick="switchTab('dashboard')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-purple-600 text-white" data-tab="dashboard">Dashboard</button>
             <button onclick="switchTab('rulebook')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="rulebook">Règlement</button>
             <button onclick="switchTab('bareme')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="bareme">Barème</button>
             <button onclick="switchTab('tickets')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="tickets">Tickets</button>
-            <button id="admin-nav-btn-mobile" onclick="switchTab('admin')" class="hidden tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-amber-400 bg-amber-500/10">Admin R2</button>
+            <button onclick="switchTab('ideas')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="ideas">Idées</button>
+            <button id="admin-nav-btn-mobile" onclick="switchTab('admin')" class="hidden tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-amber-400 bg-amber-500/10">Panel Admin</button>
         </div>
 
         <!-- MAIN CONTENT AREA -->
@@ -132,36 +138,38 @@
 
             <!-- TAB 1: DASHBOARD -->
             <div id="tab-dashboard" class="tab-content space-y-6">
-                <div class="bg-gradient-to-r from-purple-950/60 via-valeraCard to-valeraCard border border-purple-500/20 rounded-3xl p-8 shadow-2xl relative overflow-hidden glow-effect">
-                    <div class="absolute right-0 top-0 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="bg-gradient-to-r from-purple-950/70 via-valeraCard to-valeraCard border border-purple-500/30 rounded-3xl p-8 shadow-2xl relative overflow-hidden glow-box">
+                    <div class="absolute right-0 top-0 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
                     <h2 class="text-3xl font-extrabold text-white mb-2">Bienvenue sur VALERA RP, <span id="welcome-name" class="text-purple-400"></span> ! 💜</h2>
-                    <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">Portail staff officiel modernisé. Retrouvez ici votre suivi personnel, l'intégralité du règlement et les outils de gestion du serveur.</p>
+                    <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">Portail staff unifié Nexus. Retrouvez ici votre suivi personnel, l'intégralité du règlement et les suggestions de l'équipe.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl">
+                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Membres Staff</span>
                             <div class="w-10 h-10 rounded-2xl bg-purple-600/10 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/20">17</div>
                         </div>
                         <p class="text-2xl font-extrabold text-white">17 Actifs</p>
-                        <p class="text-xs text-slate-500 mt-1">Comptes configurés</p>
+                        <p class="text-xs text-slate-500 mt-1">Équipe opérationnelle</p>
                     </div>
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl">
+                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Articles Règlement</span>
                             <div class="w-10 h-10 rounded-2xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">11</div>
                         </div>
                         <p class="text-2xl font-extrabold text-white">11 Chapitres</p>
-                        <p class="text-xs text-slate-500 mt-1">À jour en permanence</p>
+                        <p class="text-xs text-slate-500 mt-1">Mis à jour en direct</p>
                     </div>
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl">
+                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Modèles Tickets</span>
-                            <div class="w-10 h-10 rounded-2xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20">23</div>
+                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Boîte à Idées</span>
+                            <div class="w-10 h-10 rounded-2xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
                         </div>
-                        <p class="text-2xl font-extrabold text-white">23 Modèles</p>
-                        <p class="text-xs text-slate-500 mt-1">Prêts à l'emploi</p>
+                        <p id="dash-ideas-count" class="text-2xl font-extrabold text-white">0</p>
+                        <p class="text-xs text-slate-500 mt-1">Suggestions partagées</p>
                     </div>
                 </div>
 
@@ -181,9 +189,7 @@
                     <h2 class="text-2xl font-extrabold text-white">Règlement Interne VALERA RP</h2>
                     <p class="text-sm text-slate-400 mt-1">L'intégralité des articles régissant l'équipe administrative.</p>
                 </div>
-                <div id="rulebook-container" class="space-y-4">
-                    <!-- Dynamic Rulebook Articles -->
-                </div>
+                <div id="rulebook-container" class="space-y-4"></div>
             </div>
 
             <!-- TAB 3: BAREME -->
@@ -202,14 +208,12 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-[#080614]/60 border-b border-valeraBorder text-xs font-bold uppercase tracking-wider text-slate-400">
+                                <tr class="bg-[#070510]/60 border-b border-valeraBorder text-xs font-bold uppercase tracking-wider text-slate-400">
                                     <th class="p-5">Motif / Infraction</th>
                                     <th class="p-5">Sanction Appliquée</th>
                                 </tr>
                             </thead>
-                            <tbody id="bareme-tbody" class="divide-y divide-valeraBorder text-sm font-medium">
-                                <!-- Dynamic rows -->
-                            </tbody>
+                            <tbody id="bareme-tbody" class="divide-y divide-valeraBorder text-sm font-medium"></tbody>
                         </table>
                     </div>
                 </div>
@@ -221,18 +225,35 @@
                     <h2 class="text-2xl font-extrabold text-white">Modèles de Réponses Tickets</h2>
                     <p class="text-sm text-slate-400 mt-1">Cliquez sur un modèle pour le copier instantanément dans votre presse-papiers.</p>
                 </div>
-                <div id="tickets-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dynamic Ticket Responses -->
+                <div id="tickets-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+
+            <!-- TAB 5: IDEAS & VOTES (NOUVEAU) -->
+            <div id="tab-ideas" class="tab-content hidden space-y-6">
+                <div class="bg-gradient-to-r from-purple-950/50 via-valeraCard to-valeraCard border border-purple-500/20 rounded-3xl p-6 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-white flex items-center">
+                            <i class="fa-solid fa-lightbulb text-amber-400 mr-3"></i> Boîte à Idées & Suggestions Staff
+                        </h2>
+                        <p class="text-sm text-slate-300 mt-1">Proposez vos idées pour améliorer le serveur et votez pour les meilleures suggestions de vos collègues !</p>
+                    </div>
+                    <button onclick="openIdeaModal()" class="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-xl shadow-purple-600/25 text-sm transition-all whitespace-nowrap">
+                        + Proposer une idée
+                    </button>
+                </div>
+
+                <div id="ideas-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Dynamic Ideas -->
                 </div>
             </div>
 
-            <!-- TAB 5: ADMIN PANEL R2 (FULL CONTROL) -->
+            <!-- TAB 6: PANEL ADMIN (RENOMMÉ) -->
             <div id="tab-admin" class="tab-content hidden space-y-8">
                 <div class="bg-gradient-to-r from-amber-500/15 via-valeraCard to-valeraCard border border-amber-500/30 rounded-3xl p-6 shadow-2xl">
                     <h2 class="text-xl font-extrabold text-amber-400 mb-1 flex items-center">
-                        <i class="fa-solid fa-shield-halved mr-2.5"></i> Panel Admin R2 (Contrôle Total à 100%)
+                        <i class="fa-solid fa-shield-halved mr-2.5"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Ajoutez, modifiez ou supprimez en direct absolu sur le cloud : gérez les rôles Super Admin, éditez le règlement, le barème et les tickets de manière instantanée.</p>
+                    <p class="text-sm text-slate-300">Gérez l'intégralité du portail en direct sur le cloud : rôles Super Admin, édition du règlement, barème, tickets et modération des idées.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -244,7 +265,7 @@
                         <div class="space-y-3 max-h-[420px] overflow-y-auto pr-2" id="admin-staff-list"></div>
                     </div>
 
-                    <!-- 2. Rulebook Editor & Modifier -->
+                    <!-- 2. Rulebook Editor -->
                     <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-book-bookmark mr-2.5 text-purple-400"></i> Ajouter / Modifier le Règlement
@@ -253,28 +274,24 @@
                             <input type="hidden" id="edit-article-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'Article</label>
-                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu / Texte</label>
-                                <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
+                                <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
                             </div>
                             <div class="flex space-x-2">
-                                <button type="submit" id="article-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">
-                                    + Ajouter l'Article
-                                </button>
-                                <button type="button" id="article-cancel-btn" onclick="resetArticleForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">
-                                    Annuler
-                                </button>
+                                <button type="submit" id="article-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">+ Ajouter l'Article</button>
+                                <button type="button" id="article-cancel-btn" onclick="resetArticleForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
                             </div>
                         </form>
                         <div class="pt-4 border-t border-valeraBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels (Modifier / Supprimer)</h4>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels</h4>
                             <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-rulebook-list"></div>
                         </div>
                     </div>
 
-                    <!-- 3. Bareme Editor & Modifier -->
+                    <!-- 3. Bareme Editor -->
                     <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-gavel mr-2.5 text-purple-400"></i> Gérer le Barème des Sanctions
@@ -283,28 +300,24 @@
                             <input type="hidden" id="edit-bareme-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Motif / Infraction</label>
-                                <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sanction Appliquée</label>
-                                <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
                             </div>
                             <div class="flex space-x-2">
-                                <button type="submit" id="bareme-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">
-                                    + Ajouter au Barème
-                                </button>
-                                <button type="button" id="bareme-cancel-btn" onclick="resetBaremeForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">
-                                    Annuler
-                                </button>
+                                <button type="submit" id="bareme-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">+ Ajouter au Barème</button>
+                                <button type="button" id="bareme-cancel-btn" onclick="resetBaremeForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
                             </div>
                         </form>
                         <div class="pt-4 border-t border-valeraBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel (Modifier / Supprimer)</h4>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel</h4>
                             <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-bareme-list"></div>
                         </div>
                     </div>
 
-                    <!-- 4. Ticket Response Editor & Modifier -->
+                    <!-- 4. Ticket Editor -->
                     <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-ticket mr-2.5 text-purple-400"></i> Gérer les Modèles de Tickets
@@ -313,23 +326,19 @@
                             <input type="hidden" id="edit-ticket-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre du Modèle</label>
-                                <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Texte de la Réponse</label>
-                                <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-[#080614] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
+                                <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
                             </div>
                             <div class="flex space-x-2">
-                                <button type="submit" id="ticket-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">
-                                    + Ajouter le Modèle
-                                </button>
-                                <button type="button" id="ticket-cancel-btn" onclick="resetTicketForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">
-                                    Annuler
-                                </button>
+                                <button type="submit" id="ticket-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">+ Ajouter le Modèle</button>
+                                <button type="button" id="ticket-cancel-btn" onclick="resetTicketForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
                             </div>
                         </form>
                         <div class="pt-4 border-t border-valeraBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels (Modifier / Supprimer)</h4>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels</h4>
                             <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-ticket-list"></div>
                         </div>
                     </div>
@@ -339,10 +348,37 @@
         </main>
     </div>
 
+    <!-- MODAL PROPOSER UNE IDÉE -->
+    <div id="idea-modal" class="fixed inset-0 z-50 bg-[#070510]/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-valeraCard border border-valeraBorder rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4 glow-box">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i> Nouvelle Suggestion Staff
+                </h3>
+                <button onclick="closeIdeaModal()" class="w-8 h-8 rounded-xl bg-valeraBg text-slate-400 hover:text-white flex items-center justify-center border border-valeraBorder">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="handleSubmitIdea(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'idée</label>
+                    <input type="text" id="idea-title" placeholder="Ex: Ajouter un nouveau script braquage..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Description détaillée</label>
+                    <textarea id="idea-desc" rows="4" placeholder="Explique ton idée en détail ici..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-purple-600/20 text-sm transition-all">
+                    Publier l'idée
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION -->
     <div id="toast" class="fixed bottom-6 right-6 z-50 bg-valeraCard border border-purple-500/30 text-white px-5 py-3.5 rounded-2xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3">
         <i class="fa-solid fa-circle-check text-purple-400 text-lg"></i>
-        <span id="toast-msg" class="text-sm font-semibold">Copié dans le presse-papiers !</span>
+        <span id="toast-msg" class="text-sm font-semibold">Action effectuée avec succès !</span>
     </div>
 
     <!-- SCRIPT APPLICATION -->
@@ -366,6 +402,10 @@
                 });
                 const json = await res.json();
                 dbData = json.record;
+                // Init ideas array if missing
+                if (!dbData.ideas) {
+                    dbData.ideas = [];
+                }
             } catch (err) {
                 console.error("Erreur chargement cloud:", err);
                 alert("Erreur de connexion au cloud JSONBin.io.");
@@ -454,6 +494,7 @@
             });
 
             if (tabName === 'admin') renderAdminPanel();
+            if (tabName === 'ideas') renderIdeas();
         }
 
         function renderApp() {
@@ -461,16 +502,19 @@
             renderRulebook();
             renderBareme();
             renderTickets();
+            renderIdeas();
         }
 
         function renderDashboard() {
             const container = document.getElementById('my-sanctions-container');
+            document.getElementById('dash-ideas-count').textContent = dbData.ideas ? dbData.ideas.length : 0;
+
             if (!dbData.staffPersonalSanctions || !dbData.staffPersonalSanctions[currentUser.name] || dbData.staffPersonalSanctions[currentUser.name].length === 0) {
                 container.innerHTML = '<p class="text-slate-400 text-sm italic">Aucun avertissement ou sanction enregistré dans votre dossier.</p>';
                 return;
             }
             container.innerHTML = dbData.staffPersonalSanctions[currentUser.name].map((s, idx) => `
-                <div class="bg-[#080614] border border-valeraBorder p-4 rounded-2xl flex items-center justify-between">
+                <div class="bg-[#070510] border border-valeraBorder p-4 rounded-2xl flex items-center justify-between">
                     <div>
                         <span class="text-xs font-bold px-3 py-1 bg-rose-500/10 text-rose-400 rounded-xl mr-3 border border-rose-500/20">Sanction #${idx + 1}</span>
                         <span class="text-sm font-semibold text-white">${s}</span>
@@ -485,7 +529,7 @@
                 <div class="bg-valeraCard border border-valeraBorder rounded-3xl overflow-hidden shadow-xl">
                     <button onclick="toggleArticle(${idx})" class="w-full px-6 py-5 text-left font-bold text-white flex items-center justify-between hover:bg-white/5 transition-colors">
                         <span>${art.title}</span>
-                        <div class="w-8 h-8 rounded-xl bg-[#080614] flex items-center justify-center border border-valeraBorder text-slate-400">
+                        <div class="w-8 h-8 rounded-xl bg-[#070510] flex items-center justify-center border border-valeraBorder text-slate-400">
                             <i id="art-icon-${idx}" class="fa-solid fa-chevron-down transition-transform"></i>
                         </div>
                     </button>
@@ -528,13 +572,123 @@
                 <div onclick="copyToClipboard('${t.text.replace(/'/g, "\\'")}')" class="bg-valeraCard border border-valeraBorder hover:border-purple-500/50 rounded-3xl p-6 cursor-pointer transition-all shadow-xl hover:shadow-purple-500/10 group">
                     <h4 class="font-bold text-white mb-3 group-hover:text-purple-400 transition-colors flex items-center justify-between">
                         <span>${t.title}</span>
-                        <div class="w-8 h-8 rounded-xl bg-[#080614] flex items-center justify-center border border-valeraBorder text-slate-500 group-hover:text-purple-400 group-hover:border-purple-500/30 transition-all">
+                        <div class="w-8 h-8 rounded-xl bg-[#070510] flex items-center justify-center border border-valeraBorder text-slate-500 group-hover:text-purple-400 group-hover:border-purple-500/30 transition-all">
                             <i class="fa-regular fa-copy text-xs"></i>
                         </div>
                     </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed bg-[#080614] p-4 rounded-2xl border border-valeraBorder/60 font-medium">${t.text}</p>
+                    <p class="text-xs text-slate-400 leading-relaxed bg-[#070510] p-4 rounded-2xl border border-valeraBorder/60 font-medium">${t.text}</p>
                 </div>
             `).join('');
+        }
+
+        // --- IDEAS & VOTES FUNCTIONS ---
+        function openIdeaModal() {
+            document.getElementById('idea-modal').classList.remove('hidden');
+        }
+        function closeIdeaModal() {
+            document.getElementById('idea-modal').classList.add('hidden');
+            document.getElementById('idea-title').value = '';
+            document.getElementById('idea-desc').value = '';
+        }
+
+        async function handleSubmitIdea(e) {
+            e.preventDefault();
+            const title = document.getElementById('idea-title').value;
+            const desc = document.getElementById('idea-desc').value;
+
+            const newIdea = {
+                id: Date.now(),
+                author: currentUser.name,
+                title: title,
+                desc: desc,
+                upvotes: [],
+                downvotes: []
+            };
+
+            if (!dbData.ideas) dbData.ideas = [];
+            dbData.ideas.unshift(newIdea);
+            await saveCloudData();
+            closeIdeaModal();
+            renderIdeas();
+            showToast("Idée publiée avec succès !");
+        }
+
+        async function voteIdea(ideaId, type) {
+            const idea = dbData.ideas.find(i => i.id === ideaId);
+            if (!idea) return;
+
+            if (!idea.upvotes) idea.upvotes = [];
+            if (!idea.downvotes) idea.downvotes = [];
+
+            const hasUp = idea.upvotes.includes(currentUser.name);
+            const hasDown = idea.downvotes.includes(currentUser.name);
+
+            if (type === 'up') {
+                if (hasUp) {
+                    idea.upvotes = idea.upvotes.filter(n => n !== currentUser.name);
+                } else {
+                    idea.upvotes.push(currentUser.name);
+                    idea.downvotes = idea.downvotes.filter(n => n !== currentUser.name);
+                }
+            } else if (type === 'down') {
+                if (hasDown) {
+                    idea.downvotes = idea.downvotes.filter(n => n !== currentUser.name);
+                } else {
+                    idea.downvotes.push(currentUser.name);
+                    idea.upvotes = idea.upvotes.filter(n => n !== currentUser.name);
+                }
+            }
+
+            await saveCloudData();
+            renderIdeas();
+        }
+
+        function renderIdeas() {
+            const container = document.getElementById('ideas-container');
+            if (!dbData.ideas || dbData.ideas.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-sm italic col-span-2 text-center py-8">Aucune idée proposée pour le moment. Sois le premier !</p>';
+                return;
+            }
+
+            container.innerHTML = dbData.ideas.map(idea => {
+                const upvotes = idea.upvotes || [];
+                const downvotes = idea.downvotes || [];
+                const userVotedUp = upvotes.includes(currentUser.name);
+                const userVotedDown = downs = downvotes.includes(currentUser.name);
+
+                return `
+                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl flex flex-col justify-between space-y-4 glow-card transition-all">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold px-3 py-1 bg-purple-500/10 text-purple-400 rounded-xl border border-purple-500/20">Par ${idea.author}</span>
+                            </div>
+                            <h4 class="font-extrabold text-white text-base mb-2">${idea.title}</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed bg-[#070510] p-4 rounded-2xl border border-valeraBorder/60">${idea.desc}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-valeraBorder">
+                            <div class="flex items-center space-x-2">
+                                <button onclick="voteIdea(${idea.id}, 'up')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${userVotedUp ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-lg' : 'bg-[#070510] text-slate-400 hover:text-white border border-valeraBorder'}">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                    <span>${upvotes.length}</span>
+                                </button>
+                                <button onclick="voteIdea(${idea.id}, 'down')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${userVotedDown ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-lg' : 'bg-[#070510] text-slate-400 hover:text-white border border-valeraBorder'}">
+                                    <i class="fa-solid fa-thumbs-down"></i>
+                                    <span>${downvotes.length}</span>
+                                </button>
+                            </div>
+                            ${(currentUser.isSuperAdmin || currentUser.name === idea.author) ? `<button onclick="deleteIdea(${idea.id})" class="text-rose-400 hover:text-rose-300 text-xs px-2.5 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/20"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function deleteIdea(id) {
+            if (!confirm("Supprimer cette idée ?")) return;
+            dbData.ideas = dbData.ideas.filter(i => i.id !== id);
+            await saveCloudData();
+            renderIdeas();
+            showToast("Idée supprimée !");
         }
 
         function copyToClipboard(text) {
@@ -556,11 +710,11 @@
             }, 3000);
         }
 
+        // --- PANEL ADMIN (RENOMMÉ) ---
         function renderAdminPanel() {
-            // 1. Staff List
             const staffList = document.getElementById('admin-staff-list');
             staffList.innerHTML = dbData.staffAccounts.map((acc, index) => `
-                <div class="bg-[#080614] border border-valeraBorder p-4 rounded-2xl flex items-center justify-between">
+                <div class="bg-[#070510] border border-valeraBorder p-4 rounded-2xl flex items-center justify-between">
                     <div>
                         <span class="font-bold text-white text-sm">${acc.name}</span>
                         <div class="text-[11px] text-slate-400 mt-0.5">Strikes: ${(dbData.staffPersonalSanctions[acc.name] || []).length}</div>
@@ -569,45 +723,40 @@
                         <button onclick="toggleSuperAdmin(${index})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${acc.isSuperAdmin ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
                             ${acc.isSuperAdmin ? '👑 Super Admin' : 'Staff'}
                         </button>
-                        <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-3 py-1.5 rounded-xl text-xs font-bold transition-all" title="Ajouter Strike">
-                            + Strike
-                        </button>
+                        <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-3 py-1.5 rounded-xl text-xs font-bold transition-all" title="Ajouter Strike">+ Strike</button>
                     </div>
                 </div>
             `).join('');
 
-            // 2. Rulebook List
             const ruleList = document.getElementById('admin-rulebook-list');
             ruleList.innerHTML = dbData.staffParts.map((art, idx) => `
-                <div class="bg-[#080614] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                <div class="bg-[#070510] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
                     <span class="font-medium text-slate-300 truncate max-w-[180px]">${art.title}</span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="editArticle(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg" title="Modifier"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editArticle(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
 
-            // 3. Bareme List
             const baremeList = document.getElementById('admin-bareme-list');
             baremeList.innerHTML = dbData.sanctionsData.map((item, idx) => `
-                <div class="bg-[#080614] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                <div class="bg-[#070510] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
                     <span class="font-medium text-slate-300 truncate max-w-[180px]">${item.motif}</span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="editBareme(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg" title="Modifier"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editBareme(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
 
-            // 4. Ticket List
             const ticketList = document.getElementById('admin-ticket-list');
             ticketList.innerHTML = dbData.ticketResponses.map((t, idx) => `
-                <div class="bg-[#080614] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                <div class="bg-[#070510] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
                     <span class="font-medium text-slate-300 truncate max-w-[180px]">${t.title}</span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="editTicket(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg" title="Modifier"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg" title="Supprimer"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editTicket(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
