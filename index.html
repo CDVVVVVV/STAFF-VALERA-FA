@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALERA RP - Portail Staff Unifié</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #06050a;
+            color: #e4e4e7;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .neon-glow {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.15);
+        }
+        .neon-border:focus {
+            border-color: rgba(168, 85, 247, 0.8);
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+        }
+        .app-view {
+            display: none;
+        }
+        .app-view.active {
+            display: flex;
+        }
+        .portal-content {
+            display: none;
+        }
+        .portal-content.active {
+            display: flex;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #09070f; }
+        ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 3px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-purple-600 selection:text-white w-full">
+
+    <!-- ================= 1. ÉCRAN DE CONNEXION ================= -->
+    <div id="view-login" class="app-view active flex-grow items-center justify-center p-6 w-full">
+        <div class="bg-[#0e0c17] border border-purple-900/60 rounded-2xl p-8 max-w-md w-full flex flex-col gap-6 neon-glow shadow-2xl">
+            <div class="text-center flex flex-col items-center gap-2">
+                <div class="w-12 h-12 rounded-2xl bg-purple-950/60 border border-purple-800/50 flex items-center justify-center text-purple-300 text-xl font-bold mb-1">🛡️</div>
+                <h1 class="text-white font-black text-2xl uppercase tracking-wider">VALERA <span class="text-purple-400">RP</span></h1>
+                <p class="text-xs text-purple-300/70 font-bold uppercase tracking-widest">Portail d'Authentification Staff</p>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-bold text-zinc-300 uppercase tracking-wider">Sélectionne ton profil :</label>
+                    <select id="staff-select" class="bg-[#141021] border border-purple-950 rounded-xl px-4 py-3 text-xs text-white neon-border focus:outline-none">
+                        <option value="" disabled selected>-- Choisis ton profil staff --</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-bold text-zinc-300 uppercase tracking-wider">Mot de passe personnel :</label>
+                    <input type="password" id="staff-password" placeholder="Entre ton mot de passe..." class="bg-[#141021] border border-purple-950 rounded-xl px-4 py-3 text-xs text-white neon-border focus:outline-none">
+                </div>
+
+                <div id="login-error" class="text-red-400 text-xs font-semibold text-center hidden">
+                    Profil ou mot de passe incorrect. Réessaie.
+                </div>
+
+                <button onclick="handleLogin()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-black text-xs uppercase tracking-widest py-3.5 rounded-xl transition shadow-[0_0_15px_rgba(168,85,247,0.4)] mt-2">
+                    Se connecter au portail
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= 2. INTERFACE PRINCIPALE DU PORTAIL ================= -->
+    <div id="view-portal" class="app-view flex-col w-full min-h-screen">
+        
+        <header class="h-20 border-b border-purple-950/60 px-8 md:px-16 flex items-center justify-between bg-[#0b0914]/90 backdrop-blur-md sticky top-0 z-50 neon-glow w-full">
+            <div class="flex items-center gap-4 cursor-pointer" onclick="switchPortalTab('accueil')">
+                <div class="w-3.5 h-3.5 rounded-full bg-purple-500 animate-ping absolute"></div>
+                <div class="w-3.5 h-3.5 rounded-full bg-purple-500 relative"></div>
+                <div>
+                    <h2 class="text-white font-black text-base md:text-lg tracking-wider uppercase">VALERA <span class="text-purple-400">RP</span></h2>
+                    <p class="text-[10px] text-purple-300/70 font-bold uppercase tracking-widest">Portail Staff Interne</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:flex items-center gap-2 bg-purple-950/40 border border-purple-900/50 px-3.5 py-1.5 rounded-xl">
+                    <span class="text-zinc-400 text-xs">Connecté :</span>
+                    <span id="logged-user-name" class="text-purple-300 text-xs font-black uppercase">Staff</span>
+                </div>
+                <button onclick="handleLogout()" class="bg-red-950/40 hover:bg-red-900/40 border border-red-800/50 text-red-200 text-xs font-bold px-4 py-2 rounded-xl transition">
+                    Déconnexion
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-grow flex flex-col p-6 md:p-10 max-w-[1600px] mx-auto w-full gap-6">
+            
+            <!-- ACCUEIL -->
+            <div id="portal-tab-accueil" class="portal-content flex-col gap-8 my-auto py-10 w-full">
+                <div class="text-center flex flex-col items-center gap-3">
+                    <span class="bg-purple-950/60 border border-purple-800/50 text-purple-300 text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest">Espace Sécurisé VALERA RP</span>
+                    <h3 class="text-white font-black text-4xl md:text-5xl uppercase tracking-wider">Bienvenue, <span id="welcome-user-name" class="text-purple-400">Staff</span> !</h3>
+                    <p class="text-zinc-400 text-sm max-w-lg">Sélectionne une section ci-dessous pour commencer.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 w-full pt-4">
+                    <div onclick="switchPortalTab('reglement')" class="group bg-[#0e0c17] border border-purple-950 hover:border-purple-500/60 rounded-2xl p-6 flex flex-col justify-between gap-6 cursor-pointer transition-all hover:scale-[1.02] neon-glow">
+                        <div class="w-12 h-12 rounded-xl bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-purple-300 text-xl font-bold group-hover:bg-purple-600 group-hover:text-white transition">📜</div>
+                        <div>
+                            <h4 class="text-white font-black text-base uppercase mb-1">Règlement Staff</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">Les parties détaillées de la conduite et du lexique.</p>
+                        </div>
+                        <span class="text-purple-400 font-bold text-xs uppercase tracking-wider">Consulter →</span>
+                    </div>
+
+                    <div onclick="switchPortalTab('bareme')" class="group bg-[#0e0c17] border border-purple-950 hover:border-purple-500/60 rounded-2xl p-6 flex flex-col justify-between gap-6 cursor-pointer transition-all hover:scale-[1.02] neon-glow">
+                        <div class="w-12 h-12 rounded-xl bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-purple-300 text-xl font-bold group-hover:bg-purple-600 group-hover:text-white transition">⚖️</div>
+                        <div>
+                            <h4 class="text-white font-black text-base uppercase mb-1">Barème Sanctions</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">Tableau officiel des infractions in-game.</p>
+                        </div>
+                        <span class="text-purple-400 font-bold text-xs uppercase tracking-wider">Ouvrir →</span>
+                    </div>
+
+                    <div onclick="switchPortalTab('sanctions-staff')" class="group bg-[#0e0c17] border border-purple-950 hover:border-purple-500/60 rounded-2xl p-6 flex flex-col justify-between gap-6 cursor-pointer transition-all hover:scale-[1.02] neon-glow">
+                        <div class="w-12 h-12 rounded-xl bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-purple-300 text-xl font-bold group-hover:bg-purple-600 group-hover:text-white transition">🛡️</div>
+                        <div>
+                            <h4 class="text-white font-black text-base uppercase mb-1">Mes Sanctions</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">Consulte ton dossier disciplinaire personnel.</p>
+                        </div>
+                        <span class="text-purple-400 font-bold text-xs uppercase tracking-wider">Consulter →</span>
+                    </div>
+
+                    <div onclick="switchPortalTab('tickets')" class="group bg-[#0e0c17] border border-purple-950 hover:border-purple-500/60 rounded-2xl p-6 flex flex-col justify-between gap-6 cursor-pointer transition-all hover:scale-[1.02] neon-glow">
+                        <div class="w-12 h-12 rounded-xl bg-purple-950/60 border border-purple-800/40 flex items-center justify-center text-purple-300 text-xl font-bold group-hover:bg-purple-600 group-hover:text-white transition">💬</div>
+                        <div>
+                            <h4 class="text-white font-black text-base uppercase mb-1">Modèles Tickets</h4>
+                            <p class="text-zinc-400 text-xs leading-relaxed">Phrases types prêtes à être copiées en un clic.</p>
+                        </div>
+                        <span class="text-purple-400 font-bold text-xs uppercase tracking-wider">Consulter →</span>
+                    </div>
+                </div>
+
+                <!-- BOUTON PANEL ADMIN (RS | CDV) -->
+                <div id="admin-panel-trigger-box" class="hidden w-full">
+                    <button onclick="switchPortalTab('admin')" class="w-full bg-gradient-to-r from-purple-900 to-purple-600 hover:from-purple-800 hover:to-purple-500 text-white font-black text-xs uppercase tracking-widest py-4 rounded-2xl transition shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center justify-center gap-2 border border-purple-500/40">
+                        👑 Ouvrir le Panel Administrateur Suprême (RS | CDV)
+                    </button>
+                </div>
+            </div>
+
+            <!-- RÈGLEMENT STAFF -->
+            <div id="portal-tab-reglement" class="portal-content flex-col gap-6 w-full">
+                <button onclick="switchPortalTab('accueil')" class="text-xs text-purple-400 font-bold uppercase hover:underline w-fit">← Retour au menu</button>
+                <div class="border-b border-purple-950 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <h3 class="text-white font-black text-3xl uppercase tracking-wide">Règlement Staff</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-zinc-400 font-semibold">Aller à :</span>
+                        <select id="reglement-dropdown" onchange="jumpToReglementPart(this.value)" class="bg-[#141021] border border-purple-950 rounded-xl px-4 py-2 text-xs text-white neon-border focus:outline-none">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="bg-[#0e0c17] border border-purple-900/40 rounded-2xl p-6 md:p-10 neon-glow flex flex-col gap-6 w-full">
+                    <div id="reglement-display-box" class="flex flex-col gap-4 min-h-[250px]"></div>
+
+                    <div class="flex items-center justify-between border-t border-purple-950/60 pt-6 mt-4">
+                        <button onclick="prevReglementPart()" id="btn-prev-reg" class="bg-purple-950/60 hover:bg-purple-900 text-purple-200 border border-purple-800/50 font-bold text-xs uppercase px-6 py-3 rounded-xl transition flex items-center gap-2">
+                            ← Précédent
+                        </button>
+                        <span id="reglement-counter" class="text-xs font-bold text-purple-400 uppercase tracking-widest"></span>
+                        <button onclick="nextReglementPart()" id="btn-next-reg" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase px-6 py-3 rounded-xl transition flex items-center gap-2 shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                            Suivant →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BARÈME DES SANCTIONS -->
+            <div id="portal-tab-bareme" class="portal-content flex-col gap-6 w-full">
+                <button onclick="switchPortalTab('accueil')" class="text-xs text-purple-400 font-bold uppercase hover:underline w-fit">← Retour au menu</button>
+                <div class="border-b border-purple-950 pb-4 flex items-center justify-between">
+                    <h3 class="text-white font-black text-3xl uppercase tracking-wide">Barème des Sanctions</h3>
+                    <span class="text-xs font-bold px-3 py-1.5 rounded-xl bg-purple-950 text-purple-300 border border-purple-800">Officiel VALERA RP</span>
+                </div>
+                <div class="overflow-x-auto border border-purple-950 rounded-2xl bg-[#0c0a14] neon-glow w-full">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-purple-950 bg-[#141021] text-[10px] font-extrabold uppercase text-purple-400">
+                                <th class="px-6 py-4">Réf</th>
+                                <th class="px-6 py-4">Infraction / Motif</th>
+                                <th class="px-6 py-4">Sanction Appliquée</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bareme-tbody" class="divide-y divide-purple-950/40"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MES SANCTIONS -->
+            <div id="portal-tab-sanctions-staff" class="portal-content flex-col gap-6 w-full">
+                <button onclick="switchPortalTab('accueil')" class="text-xs text-purple-400 font-bold uppercase hover:underline w-fit">← Retour au menu</button>
+                <div class="border-b border-purple-950 pb-4">
+                    <h3 class="text-white font-black text-3xl uppercase tracking-wide">Mon Dossier & Mes Sanctions Staff</h3>
+                </div>
+                <div class="overflow-x-auto border border-purple-950 rounded-2xl bg-[#0c0a14] neon-glow w-full">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-purple-950 bg-[#141021] text-[10px] font-extrabold uppercase text-purple-400">
+                                <th class="px-6 py-4">Date</th>
+                                <th class="px-6 py-4">Motif de la sanction interne</th>
+                                <th class="px-6 py-4">Sanction attribuée</th>
+                            </tr>
+                        </thead>
+                        <tbody id="my-sanctions-tbody" class="divide-y divide-purple-950/40"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MODÈLES TICKETS -->
+            <div id="portal-tab-tickets" class="portal-content flex-col gap-6 w-full">
+                <button onclick="switchPortalTab('accueil')" class="text-xs text-purple-400 font-bold uppercase hover:underline w-fit">← Retour au menu</button>
+                <div class="border-b border-purple-950 pb-4">
+                    <h3 class="text-white font-black text-3xl uppercase tracking-wide">Modèles de Réponses Tickets</h3>
+                </div>
+                <div id="tickets-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full"></div>
+            </div>
+
+            <!-- PANEL ADMIN (RS | CDV) -->
+            <div id="portal-tab-admin" class="portal-content flex-col gap-8 w-full">
+                <button onclick="switchPortalTab('accueil')" class="text-xs text-purple-400 font-bold uppercase hover:underline w-fit">← Retour au menu</button>
+                
+                <div class="border-b border-purple-950 pb-4">
+                    <span class="text-purple-400 font-extrabold text-xs uppercase tracking-widest">Espace Réservé Super Admin</span>
+                    <h3 class="text-white font-black text-3xl uppercase tracking-wide">Panel de Gestion Global (RS | CDV)</h3>
+                </div>
+
+                <!-- 1. GESTION DES COMPTES -->
+                <div class="bg-[#0e0c17] border border-purple-900 rounded-2xl p-6 flex flex-col gap-4 neon-glow">
+                    <h4 class="text-white font-bold text-lg uppercase">👥 Gestion des Comptes Staff & Mots de Passe</h4>
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <input type="text" id="admin-new-staff-name" placeholder="Nom du staff..." class="flex-1 bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <input type="text" id="admin-new-staff-pwd" placeholder="Mot de passe associé..." class="flex-1 bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <button onclick="adminAddStaff()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase px-6 py-2.5 rounded-xl transition">Créer le compte</button>
+                    </div>
+                    <div id="admin-staff-list" class="flex flex-col gap-2 pt-2"></div>
+                </div>
+
+                <!-- 2. ATTRIBUER ET VISUALISER LES SANCTIONS DES STAFFS -->
+                <div class="bg-[#0e0c17] border border-purple-900 rounded-2xl p-6 flex flex-col gap-4 neon-glow">
+                    <h4 class="text-white font-bold text-lg uppercase">⚡ Mettre et Suivre les Sanctions des Staffs</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <select id="admin-sanction-target" class="bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                            <option value="" disabled selected>-- Choisir le staff --</option>
+                        </select>
+                        <input type="text" id="admin-sanction-motif" placeholder="Motif..." class="bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <input type="text" id="admin-sanction-type" placeholder="Sanction (ex: Avertissement)..." class="bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                    </div>
+                    <button onclick="adminAddStaffSanction()" class="bg-red-600/80 hover:bg-red-600 text-white font-bold text-xs uppercase px-6 py-3 rounded-xl transition w-fit">Appliquer et Enregistrer la Sanction</button>
+                    
+                    <!-- Tableau de suivi global des sanctions admin -->
+                    <div class="mt-4 border border-purple-950 rounded-xl overflow-hidden bg-[#141021]">
+                        <div class="bg-[#1c162e] px-4 py-2 text-[10px] font-bold uppercase text-purple-400">📊 Historique global de toutes les sanctions attribuées aux staffs</div>
+                        <div id="admin-all-sanctions-list" class="p-3 flex flex-col gap-2"></div>
+                    </div>
+                </div>
+
+                <!-- 3. MODIFIER / AJOUTER DU RÈGLEMENT -->
+                <div class="bg-[#0e0c17] border border-purple-900 rounded-2xl p-6 flex flex-col gap-4 neon-glow">
+                    <h4 class="text-white font-bold text-lg uppercase">📜 Gérer / Modifier le Règlement Staff</h4>
+                    <div class="flex flex-col gap-3">
+                        <input type="text" id="admin-reg-title" placeholder="Titre de la partie..." class="w-full bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <textarea id="admin-reg-text" rows="3" placeholder="Contenu et description détaillée..." class="w-full bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none"></textarea>
+                        <button onclick="adminAddReglementPart()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase px-6 py-2.5 rounded-xl transition w-fit">Enregistrer / Mettre à jour la règle</button>
+                    </div>
+                    <div id="admin-reglement-edit-list" class="flex flex-col gap-2 pt-2"></div>
+                </div>
+
+                <!-- 4. MODIFIER LE BARÈME -->
+                <div class="bg-[#0e0c17] border border-purple-900 rounded-2xl p-6 flex flex-col gap-4 neon-glow">
+                    <h4 class="text-white font-bold text-lg uppercase">⚖️ Modifier le Barème des Sanctions In-Game</h4>
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <input type="text" id="admin-bareme-motif" placeholder="Infraction / Motif..." class="flex-1 bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <input type="text" id="admin-bareme-sanction" placeholder="Sanction associée..." class="flex-1 bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <button onclick="adminAddBareme()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase px-6 py-2.5 rounded-xl transition">Mettre à jour le barème</button>
+                    </div>
+                    <div id="admin-bareme-edit-list" class="flex flex-col gap-2 pt-2"></div>
+                </div>
+
+                <!-- 5. MODIFIER LES TICKETS -->
+                <div class="bg-[#0e0c17] border border-purple-900 rounded-2xl p-6 flex flex-col gap-4 neon-glow">
+                    <h4 class="text-white font-bold text-lg uppercase">💬 Gérer les Modèles de Réponses Tickets</h4>
+                    <div class="flex flex-col md:flex-row gap-3">
+                        <input type="text" id="admin-ticket-title" placeholder="Titre..." class="flex-1 bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <input type="text" id="admin-ticket-text" placeholder="Texte..." class="flex-[2] bg-[#141021] border border-purple-950 rounded-xl px-4 py-2.5 text-xs text-white neon-border focus:outline-none">
+                        <button onclick="adminAddTicket()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase px-6 py-2.5 rounded-xl transition">Ajouter le modèle</button>
+                    </div>
+                    <div id="admin-ticket-edit-list" class="flex flex-col gap-2 pt-2"></div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+
+    <!-- ================= SCRIPTS & PERSISTANCE GLOBALE ================= -->
+    <script>
+        let staffAccounts = JSON.parse(localStorage.getItem('valera_staff_accounts')) || [
+            { name: "RS | CDV", password: "100609", isSuperAdmin: true },
+            { name: "Staff 1", password: "staff1", isSuperAdmin: false },
+            { name: "Staff 2", password: "staff2", isSuperAdmin: false },
+            { name: "Staff 3", password: "staff3", isSuperAdmin: false }
+        ];
+
+        let staffPersonalSanctions = JSON.parse(localStorage.getItem('valera_staff_sanctions')) || {
+            "RS | CDV": [],
+            "Staff 1": [{ date: "12/05/2026", motif: "Retard sur la prise de service", sanction: "Rappel à l'ordre" }],
+            "Staff 2": [],
+            "Staff 3": []
+        };
+
+        let sanctionsData = JSON.parse(localStorage.getItem('valera_bareme_data')) || [
+            { motif: "Leak d'informations ou de logs staff", sanction: "Bannissement Définitif + Blacklist Projet" },
+            { motif: "Favoritisme avéré envers un groupe/joueur", sanction: "Rétrogradation immédiate + Blâme lourd" },
+            { motif: "Absence injustifiée (> 7 jours sans prévenir)", sanction: "Avertissement écrit / Exclusion" },
+            { motif: "Freekill / Tir sans sommation valable", sanction: "Bannissement 3 jours minimum" }
+        ];
+
+        let ticketResponses = JSON.parse(localStorage.getItem('valera_tickets_data')) || [
+            { title: "👋 Bonjour & Prise en charge", text: "Bonjour à toi ! Je prends en charge ton ticket. En quoi puis-je t'aider aujourd'hui sur VALERA RP ?" },
+            { title: "⏳ Demande de Preuves / Clip", text: "Merci pour ton message. Pourrais-tu nous fournir une preuve vidéo (clip non coupé) s'il te plaît ?" },
+            { title: "🤝 Appel au calme", text: "Je vous invite tous les deux à garder votre calme et à rester courtois. Nous sommes là pour régler le problème." },
+            { title: "✅ Résolution & Clôture", text: "Le problème me semble entièrement réglé. Je me permets de fermer ce ticket. Bon jeu sur VALERA RP !" }
+        ];
+
+        let staffParts = JSON.parse(localStorage.getItem('valera_reglement_data')) || [
+            { title: "1. Lexique RP", text: "Maîtrise des termes fondamentaux (PainRP, FearRP, PowerGaming, MetaGaming) pour juger en toute objectivité." },
+            { title: "2. Comportement Staff", text: "Exemplarité exigée. Zéro provocation, neutralité absolue face à vos proches et séparation stricte IC/OOC." },
+            { title: "3. Activité & Quotas", text: "Objectifs hebdomadaires de présence et de prise en charge des tickets." },
+            { title: "4. Gestion des Tickets", text: "Accueil poli, écoute neutre des deux parties, réclamation de clips vidéo probants." },
+            { title: "5. Reports In-Game", text: "Discrétion totale en Noclip. Jamais d'intervention en plein milieu d'une scène active." },
+            { title: "6. Permissions", text: "Usage strictement professionnel des commandes admin et des rôles." },
+            { title: "7. Confidentialité", text: "Secret absolu sur les salons internes et dossiers joueurs. Leak interdit." },
+            { title: "8. Sanctions Internes", text: "Processus gradué en cas d'erreur commise par un staff : avertissement, blâme ou rétrogradation." },
+            { title: "9. Fautes Graves", text: "Motifs d'exclusion immédiate : corruption, vente de biens in-game, triche ou toxicité." },
+            { title: "10. Barème Sanctions", text: "Application rigoureuse du barème officiel visible dans la section dédiée." },
+            { title: "11. Support & Clôture", text: "Utilisation des modèles de réponses standardisés pour garder un service professionnel." }
+        ];
+
+        let currentUser = null;
+        let currentRegIndex = 0;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            refreshLoginSelect();
+            initReglementView();
+            renderTicketsGrid();
+            renderBaremeTable();
+        });
+
+        function refreshLoginSelect() {
+            const select = document.getElementById('staff-select');
+            select.innerHTML = '<option value="" disabled selected>-- Choisis ton profil staff --</option>';
+            staffAccounts.forEach(acc => {
+                const opt = document.createElement('option');
+                opt.value = acc.name;
+                opt.innerText = acc.name;
+                select.appendChild(opt);
+            });
+        }
+
+        function handleLogin() {
+            const selectName = document.getElementById('staff-select').value;
+            const typedPwd = document.getElementById('staff-password').value;
+            const errorBox = document.getElementById('login-error');
+
+            const account = staffAccounts.find(acc => acc.name === selectName);
+
+            if(account && account.password === typedPwd) {
+                currentUser = account;
+                errorBox.classList.add('hidden');
+                
+                document.getElementById('view-login').classList.remove('active');
+                document.getElementById('view-portal').classList.add('active');
+                
+                document.getElementById('logged-user-name').innerText = currentUser.name;
+                document.getElementById('welcome-user-name').innerText = currentUser.name;
+
+                if(currentUser.isSuperAdmin) {
+                    document.getElementById('admin-panel-trigger-box').classList.remove('hidden');
+                    initAdminPanel();
+                } else {
+                    document.getElementById('admin-panel-trigger-box').classList.add('hidden');
+                }
+
+                renderMySanctions();
+                switchPortalTab('accueil');
+            } else {
+                errorBox.classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            document.getElementById('staff-password').value = "";
+            document.querySelectorAll('.portal-content').forEach(t => {
+                t.classList.remove('active');
+                t.classList.remove('flex');
+                t.classList.add('hidden');
+            });
+            document.getElementById('view-portal').classList.remove('active');
+            document.getElementById('view-login').classList.add('active');
+            refreshLoginSelect();
+        }
+
+        function switchPortalTab(tabId) {
+            document.querySelectorAll('.portal-content').forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.remove('flex');
+                tab.classList.add('hidden');
+            });
+            
+            const target = document.getElementById('portal-tab-' + tabId);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('active');
+                target.classList.add('flex');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initAdminPanel() {
+            // Staff List
+            const staffListDiv = document.getElementById('admin-staff-list');
+            let staffHtml = '';
+            staffAccounts.forEach((acc, index) => {
+                staffHtml += `
+                    <div class="flex items-center justify-between bg-[#141021] border border-purple-950 p-3 rounded-xl text-xs">
+                        <span class="text-white font-bold">${acc.name} (MDP : ${acc.password})</span>
+                        ${!acc.isSuperAdmin ? `<button onclick="adminDeleteStaff(${index})" class="text-red-400 font-semibold hover:underline">Supprimer</button>` : `<span class="text-purple-400 font-bold">Super Admin</span>`}
+                    </div>
+                `;
+            });
+            staffListDiv.innerHTML = staffHtml;
+
+            // Target Select
+            const targetSelect = document.getElementById('admin-sanction-target');
+            targetSelect.innerHTML = '<option value="" disabled selected>-- Choisir le staff --</option>';
+            staffAccounts.forEach(acc => {
+                targetSelect.innerHTML += `<option value="${acc.name}">${acc.name}</option>`;
+            });
+
+            // All Sanctions History View
+            const allSanctionsDiv = document.getElementById('admin-all-sanctions-list');
+            let allSanctionsHtml = '';
+            let hasSanctions = false;
+            Object.keys(staffPersonalSanctions).forEach(staffName => {
+                const list = staffPersonalSanctions[staffName] || [];
+                list.forEach(s => {
+                    hasSanctions = true;
+                    allSanctionsHtml += `
+                        <div class="flex items-center justify-between bg-[#141021] border border-purple-950/80 p-2.5 rounded-lg text-xs">
+                            <div>
+                                <span class="text-purple-400 font-bold">[${staffName}]</span> 
+                                <span class="text-zinc-300">${s.motif}</span> → 
+                                <span class="text-red-300 font-semibold uppercase">${s.sanction}</span>
+                            </div>
+                            <span class="text-[10px] text-zinc-500">${s.date} ✅ Appliquée</span>
+                        </div>
+                    `;
+                });
+            });
+            if(!hasSanctions) allSanctionsHtml = '<span class="text-xs text-zinc-500 italic p-2">Aucune sanction enregistrée pour l\'instant.</span>';
+            allSanctionsDiv.innerHTML = allSanctionsHtml;
+
+            // Règlement Edit List
+            const regEditDiv = document.getElementById('admin-reglement-edit-list');
+            let regHtml = '';
+            staffParts.forEach((part, index) => {
+                regHtml += `
+                    <div class="flex items-center justify-between bg-[#141021] border border-purple-950 p-3 rounded-xl text-xs">
+                        <span class="text-white"><b>${part.title}</b></span>
+                        <div class="flex gap-2">
+                            <button onclick="adminEditReglement(${index})" class="text-purple-400 font-semibold hover:underline">Modifier</button>
+                            <button onclick="adminDeleteReglement(${index})" class="text-red-400 font-semibold hover:underline">Supprimer</button>
+                        </div>
+                    </div>
+                `;
+            });
+            regEditDiv.innerHTML = regHtml;
+
+            // Barème Edit List
+            const baremeEditDiv = document.getElementById('admin-bareme-edit-list');
+            let baremeHtml = '';
+            sanctionsData.forEach((item, index) => {
+                baremeHtml += `
+                    <div class="flex items-center justify-between bg-[#141021] border border-purple-950 p-3 rounded-xl text-xs">
+                        <span class="text-white"><b>${item.motif}</b> → <span class="text-purple-300">${item.sanction}</span></span>
+                        <button onclick="adminDeleteBareme(${index})" class="text-red-400 font-semibold hover:underline">Supprimer</button>
+                    </div>
+                `;
+            });
+            baremeEditDiv.innerHTML = baremeHtml;
+
+            // Tickets Edit List
+            const ticketEditDiv = document.getElementById('admin-ticket-edit-list');
+            let ticketHtml = '';
+            ticketResponses.forEach((t, index) => {
+                ticketHtml += `
+                    <div class="flex items-center justify-between bg-[#141021] border border-purple-950 p-3 rounded-xl text-xs">
+                        <span class="text-white"><b>${t.title}</b></span>
+                        <button onclick="adminDeleteTicket(${index})" class="text-red-400 font-semibold hover:underline">Supprimer</button>
+                    </div>
+                `;
+            });
+            ticketEditDiv.innerHTML = ticketHtml;
+        }
+
+        function adminAddStaff() {
+            const name = document.getElementById('admin-new-staff-name').value.trim();
+            const password = document.getElementById('admin-new-staff-pwd').value.trim();
+            if(!name || !password) return alert("Remplis tous les champs !");
+            
+            staffAccounts.push({ name, password, isSuperAdmin: false });
+            staffPersonalSanctions[name] = [];
+            
+            localStorage.setItem('valera_staff_accounts', JSON.stringify(staffAccounts));
+            localStorage.setItem('valera_staff_sanctions', JSON.stringify(staffPersonalSanctions));
+            
+            document.getElementById('admin-new-staff-name').value = "";
+            document.getElementById('admin-new-staff-pwd').value = "";
+            refreshLoginSelect();
+            initAdminPanel();
+            alert("✅ Compte staff créé avec succès et pris en compte globalement !");
+        }
+
+        function adminDeleteStaff(index) {
+            if(confirm("Veux-tu vraiment supprimer ce compte staff ?")) {
+                const name = staffAccounts[index].name;
+                staffAccounts.splice(index, 1);
+                delete staffPersonalSanctions[name];
+                localStorage.setItem('valera_staff_accounts', JSON.stringify(staffAccounts));
+                localStorage.setItem('valera_staff_sanctions', JSON.stringify(staffPersonalSanctions));
+                refreshLoginSelect();
+                initAdminPanel();
+                alert("✅ Compte staff supprimé avec succès !");
+            }
+        }
+
+        function adminAddStaffSanction() {
+            const target = document.getElementById('admin-sanction-target').value;
+            const motif = document.getElementById('admin-sanction-motif').value.trim();
+            const sanction = document.getElementById('admin-sanction-type').value.trim();
+            if(!target || !motif || !sanction) return alert("Remplis tous les champs pour la sanction !");
+
+            const today = new Date().toLocaleDateString('fr-FR');
+            if(!staffPersonalSanctions[target]) staffPersonalSanctions[target] = [];
+            
+            staffPersonalSanctions[target].push({ date: today, motif, sanction });
+            localStorage.setItem('valera_staff_sanctions', JSON.stringify(staffPersonalSanctions));
+            
+            document.getElementById('admin-sanction-motif').value = "";
+            document.getElementById('admin-sanction-type').value = "";
+            initAdminPanel();
+            alert(`✅ Sanction bien enregistrée et mise à jour dans le dossier de ${target} pour tout le monde !`);
+        }
+
+        function adminAddReglementPart() {
+            const title = document.getElementById('admin-reg-title').value.trim();
+            const text = document.getElementById('admin-reg-text').value.trim();
+            if(!title || !text) return alert("Remplis le titre et le texte de la règle !");
+
+            staffParts.push({ title, text });
+            localStorage.setItem('valera_reglement_data', JSON.stringify(staffParts));
+
+            document.getElementById('admin-reg-title').value = "";
+            document.getElementById('admin-reg-text').value = "";
+            initReglementView();
+            initAdminPanel();
+            alert("✅ Partie du règlement modifiée, enregistrée et prise en compte instantanément !");
+        }
+
+        function adminEditReglement(index) {
+            const part = staffParts[index];
+            document.getElementById('admin-reg-title').value = part.title;
+            document.getElementById('admin-reg-text').value = part.text;
+            staffParts.splice(index, 1);
+            localStorage.setItem('valera_reglement_data', JSON.stringify(staffParts));
+            initReglementView();
+            initAdminPanel();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            alert("Modifie les champs puis clique sur 'Enregistrer / Mettre à jour' pour valider.");
+        }
+
+        function adminDeleteReglement(index) {
+            if(confirm("Supprimer cette partie du règlement ?")) {
+                staffParts.splice(index, 1);
+                localStorage.setItem('valera_reglement_data', JSON.stringify(staffParts));
+                initReglementView();
+                initAdminPanel();
+                alert("✅ Règlement mis à jour (partie supprimée).");
+            }
+        }
+
+        function adminAddBareme() {
+            const motif = document.getElementById('admin-bareme-motif').value.trim();
+            const sanction = document.getElementById('admin-bareme-sanction').value.trim();
+            if(!motif || !sanction) return alert("Remplis tous les champs !");
+            
+            sanctionsData.push({ motif, sanction });
+            localStorage.setItem('valera_bareme_data', JSON.stringify(sanctionsData));
+            
+            document.getElementById('admin-bareme-motif').value = "";
+            document.getElementById('admin-bareme-sanction').value = "";
+            renderBaremeTable();
+            initAdminPanel();
+            alert("✅ Barème mis à jour et sauvegardé pour tous les joueurs/staffs !");
+        }
+
+        function adminDeleteBareme(index) {
+            sanctionsData.splice(index, 1);
+            localStorage.setItem('valera_bareme_data', JSON.stringify(sanctionsData));
+            renderBaremeTable();
+            initAdminPanel();
+            alert("✅ Barème mis à jour (élément supprimé).");
+        }
+
+        function adminAddTicket() {
+            const title = document.getElementById('admin-ticket-title').value.trim();
+            const text = document.getElementById('admin-ticket-text').value.trim();
+            if(!title || !text) return alert("Remplis tous les champs !");
+            
+            ticketResponses.push({ title, text });
+            localStorage.setItem('valera_tickets_data', JSON.stringify(ticketResponses));
+            
+            document.getElementById('admin-ticket-title').value = "";
+            document.getElementById('admin-ticket-text').value = "";
+            renderTicketsGrid();
+            initAdminPanel();
+            alert("✅ Modèle de ticket ajouté et synchronisé !");
+        }
+
+        function adminDeleteTicket(index) {
+            ticketResponses.splice(index, 1);
+            localStorage.setItem('valera_tickets_data', JSON.stringify(ticketResponses));
+            renderTicketsGrid();
+            initAdminPanel();
+            alert("✅ Modèle de ticket supprimé.");
+        }
+
+        function renderBaremeTable() {
+            const tbody = document.getElementById('bareme-tbody');
+            let html = '';
+            sanctionsData.forEach((item, index) => {
+                html += `
+                    <tr class="border-b border-purple-950/60 hover:bg-purple-950/10">
+                        <td class="px-6 py-4 text-purple-400 font-bold text-xs">#${index + 1}</td>
+                        <td class="px-6 py-4 text-white font-semibold text-xs">${item.motif}</td>
+                        <td class="px-6 py-4 text-purple-300 font-bold text-xs uppercase">${item.sanction}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderMySanctions() {
+            const tbody = document.getElementById('my-sanctions-tbody');
+            const userSanctions = staffPersonalSanctions[currentUser.name] || [];
+
+            if(userSanctions.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-8 text-center text-zinc-400 text-xs italic">🎉 Ton casier disciplinaire est totalement vierge !</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            userSanctions.forEach(item => {
+                html += `
+                    <tr class="border-b border-purple-950/60 hover:bg-purple-950/10">
+                        <td class="px-6 py-4 text-purple-400 font-bold text-xs">${item.date}</td>
+                        <td class="px-6 py-4 text-white font-semibold text-xs">${item.motif}</td>
+                        <td class="px-6 py-4 text-red-300 font-bold text-xs uppercase">${item.sanction}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function initReglementView() {
+            const dropdown = document.getElementById('reglement-dropdown');
+            dropdown.innerHTML = '';
+            staffParts.forEach((part, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.innerText = part.title;
+                dropdown.appendChild(opt);
+            });
+            if(currentRegIndex >= staffParts.length) currentRegIndex = 0;
+            showReglementPart(currentRegIndex);
+        }
+
+        function showReglementPart(index) {
+            if(index < 0 || index >= staffParts.length) return;
+            currentRegIndex = index;
+            
+            document.getElementById('reglement-dropdown').value = currentRegIndex;
+            
+            const box = document.getElementById('reglement-display-box');
+            const part = staffParts[currentRegIndex];
+            
+            box.innerHTML = `
+                <span class="text-purple-400 font-bold text-xs uppercase tracking-widest">Article ${currentRegIndex + 1} sur ${staffParts.length}</span>
+                <h4 class="text-white font-black text-2xl md:text-3xl uppercase tracking-wide">${part.title}</h4>
+                <div class="bg-[#141021] border border-purple-950 p-6 rounded-2xl mt-2">
+                    <p class="text-zinc-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap">${part.text}</p>
+                </div>
+            `;
+
+            document.getElementById('reglement-counter').innerText = `Partie ${currentRegIndex + 1} / ${staffParts.length}`;
+            
+            document.getElementById('btn-prev-reg').style.visibility = currentRegIndex === 0 ? 'hidden' : 'visible';
+            document.getElementById('btn-next-reg').style.visibility = currentRegIndex === staffParts.length - 1 ? 'hidden' : 'visible';
+        }
+
+        function nextReglementPart() {
+            if(currentRegIndex < staffParts.length - 1) {
+                showReglementPart(currentRegIndex + 1);
+            }
+        }
+
+        function prevReglementPart() {
+            if(currentRegIndex > 0) {
+                showReglementPart(currentRegIndex - 1);
+            }
+        }
+
+        function jumpToReglementPart(val) {
+            showReglementPart(parseInt(val));
+        }
+
+        function renderTicketsGrid() {
+            const grid = document.getElementById('tickets-grid');
+            let html = '';
+            ticketResponses.forEach((resp, index) => {
+                html += `
+                    <div class="bg-[#0e0c17] border border-purple-950 hover:border-purple-500/50 rounded-2xl p-5 flex flex-col justify-between gap-4 neon-glow">
+                        <div>
+                            <span class="text-purple-400 font-extrabold text-[10px] uppercase tracking-widest">Modèle #${index + 1}</span>
+                            <h4 class="text-white font-bold text-sm mt-1">${resp.title}</h4>
+                        </div>
+                        <div class="bg-[#141021] border border-purple-950/80 rounded-xl p-3">
+                            <p class="text-zinc-300 text-xs italic">"${resp.text}"</p>
+                        </div>
+                        <button onclick="copyTicketText(${index})" class="bg-purple-600/20 hover:bg-purple-600 border border-purple-500/40 text-purple-200 hover:text-white font-bold text-[11px] uppercase py-2.5 rounded-xl transition">Copier le texte</button>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+
+        function copyTicketText(index) {
+            navigator.clipboard.writeText(ticketResponses[index].text);
+            alert("Modèle copié !");
+        }
+    </script>
+</body>
+</html>
