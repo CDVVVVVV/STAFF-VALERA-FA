@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALERA RP | Portail Staff Nexus</title>
+    <title>VALERA RP | Noël & Staff Nexus</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -11,11 +11,12 @@
             theme: {
                 extend: {
                     colors: {
-                        valeraBg: '#070510',
-                        valeraCard: '#100d22',
-                        valeraBorder: '#1f1a3a',
-                        valeraAccent: '#8b5cf6',
-                        valeraAccentHover: '#7c3aed'
+                        xmasBg: '#080512',
+                        xmasCard: '#130e26',
+                        xmasBorder: '#291f4c',
+                        xmasAccent: '#a855f7',
+                        xmasRed: '#f43f5e',
+                        xmasGreen: '#10b981'
                     }
                 }
             }
@@ -25,160 +26,203 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass-panel { background: rgba(16, 13, 34, 0.8); backdrop-filter: blur(20px); }
-        .glow-box { box-shadow: 0 0 50px -12px rgba(139, 92, 246, 0.3); }
-        .glow-card:hover { box-shadow: 0 0 30px -5px rgba(139, 92, 246, 0.2); transform: translateY(-2px); }
-        transition-all-custom { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass-sidebar { background: rgba(19, 14, 38, 0.85); backdrop-filter: blur(20px); }
+        .glass-card { background: rgba(19, 14, 38, 0.75); backdrop-filter: blur(16px); }
+        .glow-main { box-shadow: 0 0 60px -15px rgba(244, 63, 94, 0.25); }
+        .glow-card:hover { box-shadow: 0 0 35px -8px rgba(168, 85, 247, 0.35); transform: translateY(-3px); }
+        
+        /* SNOW EFFECT */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            z-index: 9999;
+            user-select: none;
+            cursor: default;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10px) translateX(0); opacity: 1; }
+            100% { transform: translateY(105vh) translateX(50px); opacity: 0.2; }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #080512; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #291f4c; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-valeraBg text-slate-100 min-h-screen flex flex-col selection:bg-purple-500 selection:text-white">
+<body class="bg-xmasBg text-slate-100 min-h-screen flex selection:bg-rose-500 selection:text-white overflow-x-hidden relative">
+
+    <!-- FLOCONS DE NEIGE ANIMÉS -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const snowCount = 45;
+            for (let i = 0; i < snowCount; i++) {
+                const snow = document.createElement('div');
+                snow.classList.add('snowflake');
+                snow.innerHTML = '❄';
+                snow.style.left = Math.random() * 100 + 'vw';
+                snow.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snow.style.animationDelay = (Math.random() * 5) + 's';
+                snow.style.fontSize = (Math.random() * 10 + 10) + 'px';
+                snow.style.color = Math.random() > 0.5 ? '#ffffff' : '#f43f5e';
+                document.body.appendChild(snow);
+            }
+        });
+    </script>
+
+    <!-- AUDIO DE NOËL (LECTEUR DISCRET) -->
+    <audio id="xmas-audio" loop>
+        <source src="https://actions.google.com/sounds/v1/holidays/christmas_music_box.ogg" type="audio/ogg">
+    </audio>
 
     <!-- LOGIN OVERLAY -->
-    <div id="login-modal" class="fixed inset-0 z-50 bg-[#070510]/95 backdrop-blur-2xl flex items-center justify-center p-4">
-        <div class="bg-valeraCard border border-valeraBorder rounded-3xl w-full max-w-md p-8 shadow-2xl relative overflow-hidden glow-box">
-            <div class="absolute -top-32 -right-32 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div id="login-modal" class="fixed inset-0 z-50 bg-[#080512]/95 backdrop-blur-2xl flex items-center justify-center p-4">
+        <div class="glass-card border border-xmasBorder rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl relative overflow-hidden glow-main">
+            <div class="absolute -top-32 -right-32 w-64 h-64 bg-rose-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-32 -left-32 w-64 h-64 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
             
             <div class="text-center mb-8 relative z-10">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white text-2xl mb-4 font-black shadow-xl shadow-purple-600/30 animate-pulse">
-                    V
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-rose-600 to-emerald-600 text-white text-3xl mb-4 font-black shadow-xl shadow-rose-600/30 animate-pulse">
+                    🎄
                 </div>
-                <h1 class="text-2xl font-extrabold tracking-tight text-white">VALERA RP</h1>
-                <p class="text-xs font-semibold text-purple-400 mt-1 uppercase tracking-widest">Portail Staff Nexus</p>
+                <h1 class="text-3xl font-extrabold tracking-tight text-white">VALERA RP</h1>
+                <p class="text-xs font-semibold text-rose-400 mt-1 uppercase tracking-widest">Édition Spéciale Noël ❄️</p>
             </div>
 
             <form id="login-form" class="space-y-4 relative z-10" onsubmit="handleLogin(event)">
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Sélectionner un compte Staff</label>
-                    <select id="login-username" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-purple-500 transition-all font-medium" required>
-                        <option value="" disabled selected>-- Choisissez votre profil --</option>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Sélectionner votre profil</label>
+                    <select id="login-username" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-rose-500 transition-all font-medium" required>
+                        <option value="" disabled selected>-- Choisissez un compte --</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Mot de passe personnel</label>
-                    <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-purple-500 transition-all font-medium" required>
+                    <input type="password" id="login-password" placeholder="••••••••" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-rose-500 transition-all font-medium" required>
                 </div>
 
                 <div id="login-error" class="text-rose-400 text-xs hidden bg-rose-500/10 border border-rose-500/20 p-3 rounded-2xl text-center font-medium"></div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-xl shadow-purple-600/25 text-sm uppercase tracking-wider transform hover:-translate-y-0.5">
-                    Connexion Sécurisée
+                <button type="submit" class="w-full bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-bold py-4 rounded-2xl transition-all shadow-xl shadow-rose-600/30 text-sm uppercase tracking-wider transform hover:-translate-y-0.5">
+                    Connexion Magique 🎅
                 </button>
             </form>
 
-            <div class="mt-6 pt-6 border-t border-valeraBorder text-center text-[11px] text-slate-500 font-medium">
-                Cloud Synchronized • JSONBin.io Nexus
+            <div class="mt-6 pt-6 border-t border-xmasBorder text-center text-[11px] text-slate-500 font-medium">
+                Cloud Synchronized • JSONBin.io Noël
             </div>
         </div>
     </div>
 
     <!-- MAIN APP CONTAINER -->
-    <div id="app-container" class="hidden flex-col min-h-screen">
-        <!-- HEADER -->
-        <header class="glass-panel border-b border-valeraBorder sticky top-0 z-40">
-            <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+    <div id="app-container" class="hidden flex-1 flex flex-col lg:flex-row min-h-screen">
+        
+        <!-- SIDEBAR GAUCHE -->
+        <aside class="w-full lg:w-72 glass-sidebar border-r border-xmasBorder flex flex-col justify-between p-6 z-40 shrink-0">
+            <div class="space-y-8">
+                <!-- LOGO & BRAND -->
                 <div class="flex items-center space-x-3.5">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center font-black text-white shadow-lg shadow-purple-600/25 text-lg">
-                        V
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-600 to-emerald-600 flex items-center justify-center font-black text-white shadow-lg shadow-rose-600/30 text-xl">
+                        🎁
                     </div>
                     <div>
-                        <span class="font-extrabold text-lg tracking-tight text-white block">VALERA RP</span>
-                        <span class="text-[10px] font-bold tracking-widest uppercase text-purple-400 block">Nexus System</span>
+                        <span class="font-extrabold text-base tracking-tight text-white block">VALERA RP</span>
+                        <span class="text-[10px] font-bold tracking-widest uppercase text-rose-400 block">Xmas Edition</span>
                     </div>
                 </div>
 
-                <!-- NAV TABS (Desktop) -->
-                <nav class="hidden lg:flex space-x-1.5 bg-[#070510] p-1.5 rounded-2xl border border-valeraBorder">
-                    <button onclick="switchTab('dashboard')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all bg-purple-600 text-white shadow-md shadow-purple-600/25" data-tab="dashboard">
-                        <i class="fa-solid fa-chart-pie mr-2"></i> Dashboard
+                <!-- NAVIGATION MENU -->
+                <nav class="space-y-2">
+                    <button onclick="switchTab('dashboard')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all bg-rose-600 text-white shadow-lg shadow-rose-600/25" data-tab="dashboard">
+                        <i class="fa-solid fa-house text-sm w-5"></i>
+                        <span>Dashboard</span>
                     </button>
-                    <button onclick="switchTab('rulebook')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="rulebook">
-                        <i class="fa-solid fa-book mr-2"></i> Règlement
+                    <button onclick="switchTab('rulebook')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="rulebook">
+                        <i class="fa-solid fa-book text-sm w-5"></i>
+                        <span>Règlement</span>
                     </button>
-                    <button onclick="switchTab('bareme')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="bareme">
-                        <i class="fa-solid fa-gavel mr-2"></i> Barème
+                    <button onclick="switchTab('bareme')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="bareme">
+                        <i class="fa-solid fa-gavel text-sm w-5"></i>
+                        <span>Barème Sanctions</span>
                     </button>
-                    <button onclick="switchTab('tickets')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="tickets">
-                        <i class="fa-solid fa-ticket mr-2"></i> Tickets
+                    <button onclick="switchTab('tickets')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="tickets">
+                        <i class="fa-solid fa-ticket text-sm w-5"></i>
+                        <span>Réponses Tickets</span>
                     </button>
-                    <button onclick="switchTab('ideas')" class="tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/5" data-tab="ideas">
-                        <i class="fa-solid fa-lightbulb mr-2 text-amber-400"></i> Idées & Votes
+                    <button onclick="switchTab('mysanctions')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="mysanctions">
+                        <i class="fa-solid fa-triangle-exclamation text-sm w-5 text-rose-400"></i>
+                        <span>Mes Sanctions</span>
                     </button>
-                    <button id="admin-nav-btn" onclick="switchTab('admin')" class="hidden tab-btn px-4 py-2.5 rounded-xl text-xs font-bold transition-all text-amber-400 hover:bg-amber-500/10 border border-amber-500/20" data-tab="admin">
-                        <i class="fa-solid fa-shield-halved mr-2"></i> Panel Admin
+                    <button onclick="switchTab('ideas')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="ideas">
+                        <i class="fa-solid fa-lightbulb text-sm w-5 text-amber-400"></i>
+                        <span>Boîte à Idées</span>
+                    </button>
+                    <button id="admin-nav-btn" onclick="switchTab('admin')" class="hidden tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-amber-400 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20" data-tab="admin">
+                        <i class="fa-solid fa-shield-halved text-sm w-5"></i>
+                        <span>Panel Admin</span>
                     </button>
                 </nav>
+            </div>
 
-                <!-- USER PROFILE & LOGOUT -->
-                <div class="flex items-center space-x-3">
-                    <div class="text-right hidden sm:block">
-                        <span id="current-user-name" class="block text-sm font-bold text-white"></span>
-                        <span id="current-user-role" class="text-[10px] font-bold text-purple-400 uppercase tracking-wider"></span>
+            <!-- MUSIC TOGGLE & USER FOOTER -->
+            <div class="space-y-4 pt-6 border-t border-xmasBorder">
+                <button onclick="toggleXmasMusic()" id="music-btn" class="w-full bg-xmasBg border border-xmasBorder hover:border-rose-500/40 text-slate-300 py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 transition-all">
+                    <i class="fa-solid fa-music text-rose-400"></i>
+                    <span id="music-text">Activer Musique Noël 🎵</span>
+                </button>
+
+                <div class="flex items-center justify-between">
+                    <div class="overflow-hidden pr-2">
+                        <span id="current-user-name" class="block text-sm font-bold text-white truncate"></span>
+                        <span id="current-user-role" class="text-[10px] font-bold text-rose-400 uppercase tracking-wider block"></span>
                     </div>
-                    <button onclick="handleLogout()" class="w-10 h-10 rounded-2xl bg-valeraCard hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 border border-valeraBorder text-slate-400 flex items-center justify-center transition-all" title="Se déconnecter">
+                    <button onclick="handleLogout()" class="w-10 h-10 rounded-xl bg-xmasCard hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 border border-xmasBorder text-slate-400 flex items-center justify-center transition-all shrink-0" title="Se déconnecter">
                         <i class="fa-solid fa-power-off text-sm"></i>
                     </button>
                 </div>
             </div>
-        </header>
+        </aside>
 
-        <!-- MOBILE NAV -->
-        <div class="lg:hidden bg-valeraCard border-b border-valeraBorder px-4 py-2.5 flex space-x-2 overflow-x-auto">
-            <button onclick="switchTab('dashboard')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-purple-600 text-white" data-tab="dashboard">Dashboard</button>
-            <button onclick="switchTab('rulebook')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="rulebook">Règlement</button>
-            <button onclick="switchTab('bareme')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="bareme">Barème</button>
-            <button onclick="switchTab('tickets')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="tickets">Tickets</button>
-            <button onclick="switchTab('ideas')" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-slate-400 bg-white/5" data-tab="ideas">Idées</button>
-            <button id="admin-nav-btn-mobile" onclick="switchTab('admin')" class="hidden tab-btn px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap text-amber-400 bg-amber-500/10">Panel Admin</button>
-        </div>
-
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-8 space-y-8">
+        <!-- MAIN CONTENT CONTAINER -->
+        <main class="flex-1 flex flex-col min-h-screen overflow-y-auto custom-scrollbar p-6 lg:p-10 space-y-8">
 
             <!-- TAB 1: DASHBOARD -->
             <div id="tab-dashboard" class="tab-content space-y-6">
-                <div class="bg-gradient-to-r from-purple-950/70 via-valeraCard to-valeraCard border border-purple-500/30 rounded-3xl p-8 shadow-2xl relative overflow-hidden glow-box">
-                    <div class="absolute right-0 top-0 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
-                    <h2 class="text-3xl font-extrabold text-white mb-2">Bienvenue sur VALERA RP, <span id="welcome-name" class="text-purple-400"></span> ! 💜</h2>
-                    <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">Portail staff unifié Nexus. Retrouvez ici votre suivi personnel, l'intégralité du règlement et les suggestions de l'équipe.</p>
+                <div class="bg-gradient-to-r from-rose-950/70 via-xmasCard to-xmasCard border border-rose-500/30 rounded-[2rem] p-8 lg:p-10 shadow-2xl relative overflow-hidden glow-main">
+                    <div class="absolute right-0 top-0 w-96 h-96 bg-rose-600/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 max-w-3xl">
+                        <span class="inline-block px-3 py-1 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider mb-4">Joyeuses Fêtes • Session Sécurisée ❄️</span>
+                        <h2 class="text-3xl lg:text-4xl font-extrabold text-white mb-3">Joyeux Noël, <span id="welcome-name" class="text-rose-400"></span> ! 🎄</h2>
+                        <p class="text-sm text-slate-300 leading-relaxed">Bienvenue sur le portail de Noël VALERA RP. Gère tes tickets, consulte le règlement au coin du feu et propose tes idées de fêtes.</p>
+                    </div>
                 </div>
 
+                <!-- STATS GRID -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl glow-card transition-all">
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Membres Staff</span>
-                            <div class="w-10 h-10 rounded-2xl bg-purple-600/10 text-purple-400 flex items-center justify-center font-bold text-sm border border-purple-500/20">17</div>
+                            <div class="w-10 h-10 rounded-2xl bg-rose-600/10 text-rose-400 flex items-center justify-center font-bold text-sm border border-rose-500/20">🎅</div>
                         </div>
-                        <p class="text-2xl font-extrabold text-white">17 Actifs</p>
-                        <p class="text-xs text-slate-500 mt-1">Équipe opérationnelle</p>
+                        <p id="dash-staff-count" class="text-2xl font-extrabold text-white">17 Actifs</p>
+                        <p class="text-xs text-slate-500 mt-1">Équipe de lutins</p>
                     </div>
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl glow-card transition-all">
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Articles Règlement</span>
-                            <div class="w-10 h-10 rounded-2xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">11</div>
+                            <div class="w-10 h-10 rounded-2xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">📜</div>
                         </div>
                         <p class="text-2xl font-extrabold text-white">11 Chapitres</p>
-                        <p class="text-xs text-slate-500 mt-1">Mis à jour en direct</p>
+                        <p class="text-xs text-slate-500 mt-1">À jour en direct</p>
                     </div>
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl glow-card transition-all">
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Boîte à Idées</span>
-                            <div class="w-10 h-10 rounded-2xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20">
-                                <i class="fa-solid fa-lightbulb"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-2xl bg-amber-600/10 text-amber-400 flex items-center justify-center font-bold text-sm border border-amber-500/20">💡</div>
                         </div>
                         <p id="dash-ideas-count" class="text-2xl font-extrabold text-white">0</p>
                         <p class="text-xs text-slate-500 mt-1">Suggestions partagées</p>
-                    </div>
-                </div>
-
-                <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center">
-                        <i class="fa-solid fa-shield-cat mr-2.5 text-purple-400"></i> Mes Sanctions Personnelles & Suivi
-                    </h3>
-                    <div id="my-sanctions-container" class="space-y-3">
-                        <p class="text-slate-400 text-sm italic">Aucun avertissement ou sanction enregistré dans votre dossier.</p>
                     </div>
                 </div>
             </div>
@@ -186,7 +230,7 @@
             <!-- TAB 2: RULEBOOK -->
             <div id="tab-rulebook" class="tab-content hidden space-y-6">
                 <div>
-                    <h2 class="text-2xl font-extrabold text-white">Règlement Interne VALERA RP</h2>
+                    <h2 class="text-3xl font-extrabold text-white">Règlement Interne VALERA RP</h2>
                     <p class="text-sm text-slate-400 mt-1">L'intégralité des articles régissant l'équipe administrative.</p>
                 </div>
                 <div id="rulebook-container" class="space-y-4"></div>
@@ -196,24 +240,24 @@
             <div id="tab-bareme" class="tab-content hidden space-y-6">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-extrabold text-white">Barème Officiel des Sanctions</h2>
+                        <h2 class="text-3xl font-extrabold text-white">Barème Officiel des Sanctions</h2>
                         <p class="text-sm text-slate-400 mt-1">Recherchez instantanément un motif et sa sanction associée.</p>
                     </div>
                     <div class="relative w-full sm:w-80">
                         <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-                        <input type="text" id="bareme-search" oninput="filterBareme()" placeholder="Rechercher un motif..." class="w-full bg-valeraCard border border-valeraBorder rounded-2xl pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 shadow-inner">
+                        <input type="text" id="bareme-search" oninput="filterBareme()" placeholder="Rechercher un motif..." class="w-full glass-card border border-xmasBorder rounded-2xl pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 shadow-inner">
                     </div>
                 </div>
-                <div class="bg-valeraCard border border-valeraBorder rounded-3xl overflow-hidden shadow-2xl">
+                <div class="glass-card border border-xmasBorder rounded-[2rem] overflow-hidden shadow-2xl">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-[#070510]/60 border-b border-valeraBorder text-xs font-bold uppercase tracking-wider text-slate-400">
+                                <tr class="bg-xmasBg/60 border-b border-xmasBorder text-xs font-bold uppercase tracking-wider text-slate-400">
                                     <th class="p-5">Motif / Infraction</th>
                                     <th class="p-5">Sanction Appliquée</th>
                                 </tr>
                             </thead>
-                            <tbody id="bareme-tbody" class="divide-y divide-valeraBorder text-sm font-medium"></tbody>
+                            <tbody id="bareme-tbody" class="divide-y divide-xmasBorder text-sm font-medium"></tbody>
                         </table>
                     </div>
                 </div>
@@ -222,124 +266,133 @@
             <!-- TAB 4: TICKETS -->
             <div id="tab-tickets" class="tab-content hidden space-y-6">
                 <div>
-                    <h2 class="text-2xl font-extrabold text-white">Modèles de Réponses Tickets</h2>
+                    <h2 class="text-3xl font-extrabold text-white">Modèles de Réponses Tickets</h2>
                     <p class="text-sm text-slate-400 mt-1">Cliquez sur un modèle pour le copier instantanément dans votre presse-papiers.</p>
                 </div>
-                <div id="tickets-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                <div id="tickets-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
-            <!-- TAB 5: IDEAS & VOTES (NOUVEAU) -->
+            <!-- TAB 5: MES SANCTIONS (NOUVEAU - UNIQUEMENT SES SANCTIONS) -->
+            <div id="tab-mysanctions" class="tab-content hidden space-y-6">
+                <div class="bg-gradient-to-r from-rose-950/60 via-xmasCard to-xmasCard border border-rose-500/30 rounded-[2rem] p-8 shadow-2xl">
+                    <h2 class="text-2xl lg:text-3xl font-extrabold text-white flex items-center mb-2">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400 mr-3"></i> Mon Dossier & Mes Sanctions Personnelles
+                    </h2>
+                    <p class="text-sm text-slate-300">Retrouvez ci-dessous l'historique complet de vos avertissements avec les motifs et les dates exactes.</p>
+                </div>
+                <div id="my-personal-sanctions-list" class="space-y-4"></div>
+            </div>
+
+            <!-- TAB 6: IDEAS & VOTES -->
             <div id="tab-ideas" class="tab-content hidden space-y-6">
-                <div class="bg-gradient-to-r from-purple-950/50 via-valeraCard to-valeraCard border border-purple-500/20 rounded-3xl p-6 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="bg-gradient-to-r from-purple-950/60 via-xmasCard to-xmasCard border border-purple-500/30 rounded-[2rem] p-8 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6">
                     <div>
-                        <h2 class="text-2xl font-extrabold text-white flex items-center">
+                        <h2 class="text-2xl lg:text-3xl font-extrabold text-white flex items-center mb-2">
                             <i class="fa-solid fa-lightbulb text-amber-400 mr-3"></i> Boîte à Idées & Suggestions Staff
                         </h2>
-                        <p class="text-sm text-slate-300 mt-1">Proposez vos idées pour améliorer le serveur et votez pour les meilleures suggestions de vos collègues !</p>
+                        <p class="text-sm text-slate-300">Proposez vos idées pour le serveur et votez pour les meilleures suggestions de vos collègues !</p>
                     </div>
-                    <button onclick="openIdeaModal()" class="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold px-6 py-3.5 rounded-2xl shadow-xl shadow-purple-600/25 text-sm transition-all whitespace-nowrap">
+                    <button onclick="openIdeaModal()" class="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-bold px-7 py-4 rounded-2xl shadow-xl shadow-rose-600/30 text-sm transition-all whitespace-nowrap transform hover:-translate-y-0.5">
                         + Proposer une idée
                     </button>
                 </div>
 
-                <div id="ideas-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Dynamic Ideas -->
-                </div>
+                <div id="ideas-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
-            <!-- TAB 6: PANEL ADMIN (RENOMMÉ) -->
+            <!-- TAB 7: PANEL ADMIN (CONTRÔLE TOTAL AVEC RETRAIT DE SANCTIONS & VIRER MEMBRE) -->
             <div id="tab-admin" class="tab-content hidden space-y-8">
-                <div class="bg-gradient-to-r from-amber-500/15 via-valeraCard to-valeraCard border border-amber-500/30 rounded-3xl p-6 shadow-2xl">
-                    <h2 class="text-xl font-extrabold text-amber-400 mb-1 flex items-center">
-                        <i class="fa-solid fa-shield-halved mr-2.5"></i> Panel Admin (Contrôle Total à 100%)
+                <div class="bg-gradient-to-r from-amber-500/20 via-xmasCard to-xmasCard border border-amber-500/30 rounded-[2rem] p-8 shadow-2xl">
+                    <h2 class="text-2xl font-extrabold text-amber-400 mb-2 flex items-center">
+                        <i class="fa-solid fa-shield-halved mr-3"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Gérez l'intégralité du portail en direct sur le cloud : rôles Super Admin, édition du règlement, barème, tickets et modération des idées.</p>
+                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : révoquez l'accès des membres du staff, supprimez des sanctions ciblées, gérez les rôles Super Admin et modérez le règlement.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- 1. Staff Management -->
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl space-y-4">
+                    <!-- 1. Staff Management & Kick / Roles / Sanctions control -->
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-users-gear mr-2.5 text-purple-400"></i> Gestion des Comptes & Droits Super Admin
+                            <i class="fa-solid fa-users-gear mr-3 text-rose-400"></i> Gestion du Staff (Rôles, Strikes & Révocation)
                         </h3>
-                        <div class="space-y-3 max-h-[420px] overflow-y-auto pr-2" id="admin-staff-list"></div>
+                        <div class="space-y-3 max-h-[450px] overflow-y-auto pr-2 custom-scrollbar" id="admin-staff-list"></div>
                     </div>
 
                     <!-- 2. Rulebook Editor -->
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-book-bookmark mr-2.5 text-purple-400"></i> Ajouter / Modifier le Règlement
+                            <i class="fa-solid fa-book-bookmark mr-3 text-rose-400"></i> Éditer le Règlement
                         </h3>
                         <form onsubmit="handleSaveArticle(event)" class="space-y-3.5">
                             <input type="hidden" id="edit-article-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'Article</label>
-                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu / Texte</label>
-                                <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu</label>
+                                <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
                             </div>
                             <div class="flex space-x-2">
-                                <button type="submit" id="article-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">+ Ajouter l'Article</button>
+                                <button type="submit" id="article-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter l'Article</button>
                                 <button type="button" id="article-cancel-btn" onclick="resetArticleForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
                             </div>
                         </form>
-                        <div class="pt-4 border-t border-valeraBorder">
+                        <div class="pt-4 border-t border-xmasBorder">
                             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels</h4>
-                            <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-rulebook-list"></div>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-rulebook-list"></div>
                         </div>
                     </div>
 
                     <!-- 3. Bareme Editor -->
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-gavel mr-2.5 text-purple-400"></i> Gérer le Barème des Sanctions
+                            <i class="fa-solid fa-gavel mr-3 text-rose-400"></i> Gérer le Barème
                         </h3>
                         <form onsubmit="handleSaveBareme(event)" class="space-y-3.5">
                             <input type="hidden" id="edit-bareme-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Motif / Infraction</label>
-                                <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sanction Appliquée</label>
-                                <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
                             </div>
                             <div class="flex space-x-2">
-                                <button type="submit" id="bareme-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">+ Ajouter au Barème</button>
+                                <button type="submit" id="bareme-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter au Barème</button>
                                 <button type="button" id="bareme-cancel-btn" onclick="resetBaremeForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
                             </div>
                         </form>
-                        <div class="pt-4 border-t border-valeraBorder">
+                        <div class="pt-4 border-t border-xmasBorder">
                             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel</h4>
-                            <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-bareme-list"></div>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-bareme-list"></div>
                         </div>
                     </div>
 
                     <!-- 4. Ticket Editor -->
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-ticket mr-2.5 text-purple-400"></i> Gérer les Modèles de Tickets
+                            <i class="fa-solid fa-ticket mr-3 text-rose-400"></i> Gérer les Modèles Tickets
                         </h3>
                         <form onsubmit="handleSaveTicket(event)" class="space-y-3.5">
                             <input type="hidden" id="edit-ticket-index" value="-1">
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre du Modèle</label>
-                                <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                                <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Texte de la Réponse</label>
-                                <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
+                                <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
                             </div>
                             <div class="flex space-x-2">
-                                <button type="submit" id="ticket-submit-btn" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-purple-600/20 text-sm">+ Ajouter le Modèle</button>
+                                <button type="submit" id="ticket-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter le Modèle</button>
                                 <button type="button" id="ticket-cancel-btn" onclick="resetTicketForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
                             </div>
                         </form>
-                        <div class="pt-4 border-t border-valeraBorder">
+                        <div class="pt-4 border-t border-xmasBorder">
                             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels</h4>
-                            <div class="space-y-2 max-h-[140px] overflow-y-auto" id="admin-ticket-list"></div>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-ticket-list"></div>
                         </div>
                     </div>
                 </div>
@@ -349,26 +402,26 @@
     </div>
 
     <!-- MODAL PROPOSER UNE IDÉE -->
-    <div id="idea-modal" class="fixed inset-0 z-50 bg-[#070510]/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-valeraCard border border-valeraBorder rounded-3xl w-full max-w-lg p-6 shadow-2xl space-y-4 glow-box">
+    <div id="idea-modal" class="fixed inset-0 z-50 bg-[#080512]/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-xmasBorder rounded-[2.5rem] w-full max-w-lg p-8 shadow-2xl space-y-6 glow-main">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-bold text-white flex items-center">
-                    <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i> Nouvelle Suggestion Staff
+                <h3 class="text-xl font-bold text-white flex items-center">
+                    <i class="fa-solid fa-lightbulb text-amber-400 mr-3"></i> Nouvelle Suggestion Staff
                 </h3>
-                <button onclick="closeIdeaModal()" class="w-8 h-8 rounded-xl bg-valeraBg text-slate-400 hover:text-white flex items-center justify-center border border-valeraBorder">
+                <button onclick="closeIdeaModal()" class="w-9 h-9 rounded-xl bg-xmasBg text-slate-400 hover:text-white flex items-center justify-center border border-xmasBorder transition-all">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <form onsubmit="handleSubmitIdea(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'idée</label>
-                    <input type="text" id="idea-title" placeholder="Ex: Ajouter un nouveau script braquage..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium" required>
+                    <input type="text" id="idea-title" placeholder="Ex: Ajouter un évent de Noël..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Description détaillée</label>
-                    <textarea id="idea-desc" rows="4" placeholder="Explique ton idée en détail ici..." class="w-full bg-[#070510] border border-valeraBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 font-medium leading-relaxed" required></textarea>
+                    <textarea id="idea-desc" rows="4" placeholder="Explique ton idée en détail..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
                 </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-purple-600/20 text-sm transition-all">
+                <button type="submit" class="w-full bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-bold py-4 rounded-2xl shadow-xl shadow-rose-600/30 text-sm transition-all">
                     Publier l'idée
                 </button>
             </form>
@@ -376,8 +429,8 @@
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-valeraCard border border-purple-500/30 text-white px-5 py-3.5 rounded-2xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3">
-        <i class="fa-solid fa-circle-check text-purple-400 text-lg"></i>
+    <div id="toast" class="fixed bottom-6 right-6 z-50 glass-card border border-rose-500/30 text-white px-5 py-3.5 rounded-2xl shadow-2xl transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3">
+        <i class="fa-solid fa-circle-check text-rose-400 text-lg"></i>
         <span id="toast-msg" class="text-sm font-semibold">Action effectuée avec succès !</span>
     </div>
 
@@ -389,11 +442,26 @@
 
         let dbData = null;
         let currentUser = null;
+        let isMusicPlaying = false;
 
         window.addEventListener('DOMContentLoaded', async () => {
             await fetchCloudData();
             initLoginDropdown();
         });
+
+        function toggleXmasMusic() {
+            const audio = document.getElementById('xmas-audio');
+            const btnText = document.getElementById('music-text');
+            if (isMusicPlaying) {
+                audio.pause();
+                btnText.textContent = "Activer Musique Noël 🎵";
+                isMusicPlaying = false;
+            } else {
+                audio.play().catch(e => console.log("Audio autoplay bloqué"));
+                btnText.textContent = "Couper Musique 🔇";
+                isMusicPlaying = true;
+            }
+        }
 
         async function fetchCloudData() {
             try {
@@ -402,10 +470,8 @@
                 });
                 const json = await res.json();
                 dbData = json.record;
-                // Init ideas array if missing
-                if (!dbData.ideas) {
-                    dbData.ideas = [];
-                }
+                if (!dbData.ideas) dbData.ideas = [];
+                if (!dbData.staffPersonalSanctions) dbData.staffPersonalSanctions = {};
             } catch (err) {
                 console.error("Erreur chargement cloud:", err);
                 alert("Erreur de connexion au cloud JSONBin.io.");
@@ -432,7 +498,7 @@
         function initLoginDropdown() {
             if (!dbData || !dbData.staffAccounts) return;
             const select = document.getElementById('login-username');
-            select.innerHTML = '<option value="" disabled selected>-- Choisissez votre profil --</option>';
+            select.innerHTML = '<option value="" disabled selected>-- Choisissez un compte --</option>';
             dbData.staffAccounts.forEach(acc => {
                 const opt = document.createElement('option');
                 opt.value = acc.name;
@@ -465,7 +531,8 @@
 
             if (currentUser.isSuperAdmin) {
                 document.getElementById('admin-nav-btn').classList.remove('hidden');
-                document.getElementById('admin-nav-btn-mobile').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-nav-btn').classList.add('hidden');
             }
 
             renderApp();
@@ -485,16 +552,17 @@
             document.getElementById(`tab-${tabName}`).classList.remove('hidden');
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-purple-600', 'text-white', 'shadow-md', 'shadow-purple-600/25');
-                btn.classList.add('text-slate-400', 'bg-white/5');
+                btn.classList.remove('bg-rose-600', 'text-white', 'shadow-lg', 'shadow-rose-600/25');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-white/[0.04]');
             });
             document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(btn => {
-                btn.classList.add('bg-purple-600', 'text-white', 'shadow-md', 'shadow-purple-600/25');
-                btn.classList.remove('text-slate-400', 'bg-white/5');
+                btn.classList.add('bg-rose-600', 'text-white', 'shadow-lg', 'shadow-rose-600/25');
+                btn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-white/[0.04]');
             });
 
             if (tabName === 'admin') renderAdminPanel();
             if (tabName === 'ideas') renderIdeas();
+            if (tabName === 'mysanctions') renderMySanctions();
         }
 
         function renderApp() {
@@ -503,21 +571,36 @@
             renderBareme();
             renderTickets();
             renderIdeas();
+            renderMySanctions();
         }
 
         function renderDashboard() {
-            const container = document.getElementById('my-sanctions-container');
+            document.getElementById('dash-staff-count').textContent = dbData.staffAccounts.length + " Actifs";
             document.getElementById('dash-ideas-count').textContent = dbData.ideas ? dbData.ideas.length : 0;
+        }
 
-            if (!dbData.staffPersonalSanctions || !dbData.staffPersonalSanctions[currentUser.name] || dbData.staffPersonalSanctions[currentUser.name].length === 0) {
-                container.innerHTML = '<p class="text-slate-400 text-sm italic">Aucun avertissement ou sanction enregistré dans votre dossier.</p>';
+        // --- MES SANCTIONS PERSONNELLES ---
+        function renderMySanctions() {
+            const container = document.getElementById('my-personal-sanctions-list');
+            const sanctions = (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[currentUser.name]) || [];
+
+            if (sanctions.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-8 text-center text-slate-400 italic">
+                        🎅 Bravo ! Aucun avertissement ou sanction dans ton dossier personnel. Continue comme ça !
+                    </div>
+                `;
                 return;
             }
-            container.innerHTML = dbData.staffPersonalSanctions[currentUser.name].map((s, idx) => `
-                <div class="bg-[#070510] border border-valeraBorder p-4 rounded-2xl flex items-center justify-between">
-                    <div>
-                        <span class="text-xs font-bold px-3 py-1 bg-rose-500/10 text-rose-400 rounded-xl mr-3 border border-rose-500/20">Sanction #${idx + 1}</span>
-                        <span class="text-sm font-semibold text-white">${s}</span>
+
+            container.innerHTML = sanctions.map((s, idx) => `
+                <div class="glass-card border border-xmasBorder p-6 rounded-[2rem] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xs font-bold px-3 py-1 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/25">Sanction #${idx + 1}</span>
+                            <span class="text-xs text-slate-400"><i class="fa-regular fa-calendar mr-1.5"></i> ${s.date || 'Date non spécifiée'}</span>
+                        </div>
+                        <p class="text-base font-bold text-white pt-2">${s.reason || s}</p>
                     </div>
                 </div>
             `).join('');
@@ -526,14 +609,14 @@
         function renderRulebook() {
             const container = document.getElementById('rulebook-container');
             container.innerHTML = dbData.staffParts.map((art, idx) => `
-                <div class="bg-valeraCard border border-valeraBorder rounded-3xl overflow-hidden shadow-xl">
-                    <button onclick="toggleArticle(${idx})" class="w-full px-6 py-5 text-left font-bold text-white flex items-center justify-between hover:bg-white/5 transition-colors">
-                        <span>${art.title}</span>
-                        <div class="w-8 h-8 rounded-xl bg-[#070510] flex items-center justify-center border border-valeraBorder text-slate-400">
+                <div class="glass-card border border-xmasBorder rounded-[2rem] overflow-hidden shadow-xl transition-all">
+                    <button onclick="toggleArticle(${idx})" class="w-full px-7 py-6 text-left font-bold text-white flex items-center justify-between hover:bg-white/[0.02] transition-colors">
+                        <span class="text-base">${art.title}</span>
+                        <div class="w-9 h-9 rounded-xl bg-xmasBg flex items-center justify-center border border-xmasBorder text-slate-400">
                             <i id="art-icon-${idx}" class="fa-solid fa-chevron-down transition-transform"></i>
                         </div>
                     </button>
-                    <div id="art-content-${idx}" class="hidden px-6 pb-6 pt-2 text-sm text-slate-300 border-t border-valeraBorder whitespace-pre-line leading-relaxed">
+                    <div id="art-content-${idx}" class="hidden px-7 pb-7 pt-2 text-sm text-slate-300 border-t border-xmasBorder whitespace-pre-line leading-relaxed">
                         ${art.text}
                     </div>
                 </div>
@@ -550,9 +633,9 @@
         function renderBareme() {
             const tbody = document.getElementById('bareme-tbody');
             tbody.innerHTML = dbData.sanctionsData.map(item => `
-                <tr class="hover:bg-white/[0.02] transition-colors border-b border-valeraBorder">
+                <tr class="hover:bg-white/[0.02] transition-colors border-b border-xmasBorder">
                     <td class="p-5 font-bold text-white">${item.motif}</td>
-                    <td class="p-5 text-purple-400 font-extrabold">${item.sanction}</td>
+                    <td class="p-5 text-rose-400 font-extrabold">${item.sanction}</td>
                 </tr>
             `).join('');
         }
@@ -569,19 +652,21 @@
         function renderTickets() {
             const container = document.getElementById('tickets-container');
             container.innerHTML = dbData.ticketResponses.map(t => `
-                <div onclick="copyToClipboard('${t.text.replace(/'/g, "\\'")}')" class="bg-valeraCard border border-valeraBorder hover:border-purple-500/50 rounded-3xl p-6 cursor-pointer transition-all shadow-xl hover:shadow-purple-500/10 group">
-                    <h4 class="font-bold text-white mb-3 group-hover:text-purple-400 transition-colors flex items-center justify-between">
-                        <span>${t.title}</span>
-                        <div class="w-8 h-8 rounded-xl bg-[#070510] flex items-center justify-center border border-valeraBorder text-slate-500 group-hover:text-purple-400 group-hover:border-purple-500/30 transition-all">
-                            <i class="fa-regular fa-copy text-xs"></i>
-                        </div>
-                    </h4>
-                    <p class="text-xs text-slate-400 leading-relaxed bg-[#070510] p-4 rounded-2xl border border-valeraBorder/60 font-medium">${t.text}</p>
+                <div onclick="copyToClipboard('${t.text.replace(/'/g, "\\'")}')" class="glass-card border border-xmasBorder hover:border-rose-500/50 rounded-[2rem] p-6 cursor-pointer transition-all shadow-xl glow-card group flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-white mb-3 group-hover:text-rose-400 transition-colors flex items-center justify-between text-base">
+                            <span>${t.title}</span>
+                            <div class="w-9 h-9 rounded-xl bg-xmasBg flex items-center justify-center border border-xmasBorder text-slate-500 group-hover:text-rose-400 group-hover:border-rose-500/30 transition-all">
+                                <i class="fa-regular fa-copy text-xs"></i>
+                            </div>
+                        </h4>
+                        <p class="text-xs text-slate-400 leading-relaxed bg-xmasBg p-4 rounded-2xl border border-xmasBorder/60 font-medium">${t.text}</p>
+                    </div>
                 </div>
             `).join('');
         }
 
-        // --- IDEAS & VOTES FUNCTIONS ---
+        // --- IDEAS & VOTES ---
         function openIdeaModal() {
             document.getElementById('idea-modal').classList.remove('hidden');
         }
@@ -646,7 +731,7 @@
         function renderIdeas() {
             const container = document.getElementById('ideas-container');
             if (!dbData.ideas || dbData.ideas.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 text-sm italic col-span-2 text-center py-8">Aucune idée proposée pour le moment. Sois le premier !</p>';
+                container.innerHTML = '<p class="text-slate-400 text-sm italic col-span-2 text-center py-12">Aucune idée proposée pour le moment. Sois le premier !</p>';
                 return;
             }
 
@@ -654,29 +739,29 @@
                 const upvotes = idea.upvotes || [];
                 const downvotes = idea.downvotes || [];
                 const userVotedUp = upvotes.includes(currentUser.name);
-                const userVotedDown = downs = downvotes.includes(currentUser.name);
+                const userVotedDown = downvotes.includes(currentUser.name);
 
                 return `
-                    <div class="bg-valeraCard border border-valeraBorder rounded-3xl p-6 shadow-xl flex flex-col justify-between space-y-4 glow-card transition-all">
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl flex flex-col justify-between space-y-4 glow-card transition-all">
                         <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-bold px-3 py-1 bg-purple-500/10 text-purple-400 rounded-xl border border-purple-500/20">Par ${idea.author}</span>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold px-3 py-1 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20">Proposé par ${idea.author}</span>
                             </div>
                             <h4 class="font-extrabold text-white text-base mb-2">${idea.title}</h4>
-                            <p class="text-xs text-slate-300 leading-relaxed bg-[#070510] p-4 rounded-2xl border border-valeraBorder/60">${idea.desc}</p>
+                            <p class="text-xs text-slate-300 leading-relaxed bg-xmasBg p-4 rounded-2xl border border-xmasBorder/60">${idea.desc}</p>
                         </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-valeraBorder">
+                        <div class="flex items-center justify-between pt-3 border-t border-xmasBorder">
                             <div class="flex items-center space-x-2">
-                                <button onclick="voteIdea(${idea.id}, 'up')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${userVotedUp ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-lg' : 'bg-[#070510] text-slate-400 hover:text-white border border-valeraBorder'}">
+                                <button onclick="voteIdea(${idea.id}, 'up')" class="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${userVotedUp ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-lg' : 'bg-xmasBg text-slate-400 hover:text-white border border-xmasBorder'}">
                                     <i class="fa-solid fa-thumbs-up"></i>
                                     <span>${upvotes.length}</span>
                                 </button>
-                                <button onclick="voteIdea(${idea.id}, 'down')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${userVotedDown ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-lg' : 'bg-[#070510] text-slate-400 hover:text-white border border-valeraBorder'}">
+                                <button onclick="voteIdea(${idea.id}, 'down')" class="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${userVotedDown ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-lg' : 'bg-xmasBg text-slate-400 hover:text-white border border-xmasBorder'}">
                                     <i class="fa-solid fa-thumbs-down"></i>
                                     <span>${downvotes.length}</span>
                                 </button>
                             </div>
-                            ${(currentUser.isSuperAdmin || currentUser.name === idea.author) ? `<button onclick="deleteIdea(${idea.id})" class="text-rose-400 hover:text-rose-300 text-xs px-2.5 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/20"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            ${(currentUser.isSuperAdmin || currentUser.name === idea.author) ? `<button onclick="deleteIdea(${idea.id})" class="text-rose-400 hover:text-rose-300 text-xs px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/20 transition-all"><i class="fa-solid fa-trash"></i></button>` : ''}
                         </div>
                     </div>
                 `;
@@ -691,49 +776,49 @@
             showToast("Idée supprimée !");
         }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            showToast("Modèle copié dans le presse-papiers !");
-        }
-
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').textContent = msg;
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            if (isError) {
-                toast.classList.add('bg-rose-950', 'border-rose-500/30');
-            } else {
-                toast.classList.remove('bg-rose-950', 'border-rose-500/30');
-            }
-            setTimeout(() => {
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 3000);
-        }
-
-        // --- PANEL ADMIN (RENOMMÉ) ---
+        // --- PANEL ADMIN (VIRER MEMBRE, RETIRER SANCTION, ETC.) ---
         function renderAdminPanel() {
             const staffList = document.getElementById('admin-staff-list');
-            staffList.innerHTML = dbData.staffAccounts.map((acc, index) => `
-                <div class="bg-[#070510] border border-valeraBorder p-4 rounded-2xl flex items-center justify-between">
-                    <div>
-                        <span class="font-bold text-white text-sm">${acc.name}</span>
-                        <div class="text-[11px] text-slate-400 mt-0.5">Strikes: ${(dbData.staffPersonalSanctions[acc.name] || []).length}</div>
+            staffList.innerHTML = dbData.staffAccounts.map((acc, index) => {
+                const sanctions = (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[acc.name]) || [];
+                return `
+                    <div class="bg-xmasBg border border-xmasBorder p-4 rounded-2xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="font-bold text-white text-sm">${acc.name}</span>
+                                <div class="text-[11px] text-slate-400 mt-0.5">Strikes: ${sanctions.length}</div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="toggleSuperAdmin(${index})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${acc.isSuperAdmin ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+                                    ${acc.isSuperAdmin ? '👑 Super Admin' : 'Staff'}
+                                </button>
+                                <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all" title="Ajouter Strike">+ Strike</button>
+                                <button onclick="kickStaff('${acc.name}')" class="bg-rose-600 hover:bg-rose-500 text-white px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all" title="Virer le membre"><i class="fa-solid fa-user-slash"></i></button>
+                            </div>
+                        </div>
+                        ${sanctions.length > 0 ? `
+                            <div class="pt-2 border-t border-xmasBorder/50 space-y-1.5">
+                                <span class="text-[10px] font-bold uppercase text-slate-400">Sanctions de ${acc.name} (Cliquer pour retirer) :</span>
+                                <div class="space-y-1">
+                                    ${sanctions.map((s, sIndex) => `
+                                        <div class="flex items-center justify-between bg-xmasCard px-3 py-1.5 rounded-xl text-xs border border-xmasBorder">
+                                            <span class="text-slate-300 truncate max-w-[220px]">${s.reason || s} <span class="text-[10px] text-slate-500">(${s.date || ''})</span></span>
+                                            <button onclick="removeSanction('${acc.name}', ${sIndex})" class="text-rose-400 hover:text-rose-300 font-bold ml-2"><i class="fa-solid fa-xmark"></i></button>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="toggleSuperAdmin(${index})" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${acc.isSuperAdmin ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
-                            ${acc.isSuperAdmin ? '👑 Super Admin' : 'Staff'}
-                        </button>
-                        <button onclick="promptAddSanction('${acc.name}')" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 px-3 py-1.5 rounded-xl text-xs font-bold transition-all" title="Ajouter Strike">+ Strike</button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             const ruleList = document.getElementById('admin-rulebook-list');
             ruleList.innerHTML = dbData.staffParts.map((art, idx) => `
-                <div class="bg-[#070510] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
                     <span class="font-medium text-slate-300 truncate max-w-[180px]">${art.title}</span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="editArticle(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="editArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
@@ -741,10 +826,10 @@
 
             const baremeList = document.getElementById('admin-bareme-list');
             baremeList.innerHTML = dbData.sanctionsData.map((item, idx) => `
-                <div class="bg-[#070510] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
                     <span class="font-medium text-slate-300 truncate max-w-[180px]">${item.motif}</span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="editBareme(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="editBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
@@ -752,10 +837,10 @@
 
             const ticketList = document.getElementById('admin-ticket-list');
             ticketList.innerHTML = dbData.ticketResponses.map((t, idx) => `
-                <div class="bg-[#070510] border border-valeraBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
                     <span class="font-medium text-slate-300 truncate max-w-[180px]">${t.title}</span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="editTicket(${idx})" class="text-purple-400 hover:text-purple-300 px-2.5 py-1 bg-purple-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="editTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
@@ -770,19 +855,47 @@
             showToast(`Droits modifiés pour ${dbData.staffAccounts[index].name} !`);
         }
 
+        async function kickStaff(staffName) {
+            if (staffName === currentUser.name) {
+                alert("Tu ne peux pas te virer toi-même !");
+                return;
+            }
+            if (!confirm(`Voulez-vous vraiment virer ${staffName} et lui retirer tout accès au portail ?`)) return;
+            
+            dbData.staffAccounts = dbData.staffAccounts.filter(acc => acc.name !== staffName);
+            if (dbData.staffPersonalSanctions[staffName]) {
+                delete dbData.staffPersonalSanctions[staffName];
+            }
+            await saveCloudData();
+            renderAdminPanel();
+            initLoginDropdown();
+            showToast(`${staffName} a été retiré de l'équipe.`);
+        }
+
         async function promptAddSanction(staffName) {
             const reason = prompt(`Entrer le motif du strike pour ${staffName} :`);
             if (!reason) return;
+            const dateStr = new Date().toLocaleDateString('fr-FR') + ' à ' + new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
+            
             if (!dbData.staffPersonalSanctions[staffName]) {
                 dbData.staffPersonalSanctions[staffName] = [];
             }
-            dbData.staffPersonalSanctions[staffName].push(reason);
+            dbData.staffPersonalSanctions[staffName].push({ reason, date: dateStr });
             await saveCloudData();
             renderAdminPanel();
             showToast(`Sanction ajoutée pour ${staffName} !`);
         }
 
-        // --- ARTICLE CRUD ---
+        async function removeSanction(staffName, sanctionIndex) {
+            if (!confirm(`Retirer cette sanction à ${staffName} ?`)) return;
+            if (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[staffName]) {
+                dbData.staffPersonalSanctions[staffName].splice(sanctionIndex, 1);
+                await saveCloudData();
+                renderAdminPanel();
+                showToast("Sanction retirée avec succès !");
+            }
+        }
+
         async function handleSaveArticle(e) {
             e.preventDefault();
             const idx = parseInt(document.getElementById('edit-article-index').value);
@@ -794,7 +907,7 @@
                 showToast("Article ajouté au cloud !");
             } else {
                 dbData.staffParts[idx] = { title, text };
-                showToast("Article modifié avec succès !");
+                showToast("Article modifié !");
             }
 
             await saveCloudData();
@@ -821,7 +934,7 @@
         }
 
         async function deleteArticle(idx) {
-            if (!confirm("Voulez-vous vraiment supprimer cet article ?")) return;
+            if (!confirm("Supprimer cet article ?")) return;
             dbData.staffParts.splice(idx, 1);
             await saveCloudData();
             renderRulebook();
@@ -829,7 +942,6 @@
             showToast("Article supprimé !");
         }
 
-        // --- BAREME CRUD ---
         async function handleSaveBareme(e) {
             e.preventDefault();
             const idx = parseInt(document.getElementById('edit-bareme-index').value);
@@ -841,7 +953,7 @@
                 showToast("Barème mis à jour !");
             } else {
                 dbData.sanctionsData[idx] = { motif, sanction };
-                showToast("Ligne de barème modifiée !");
+                showToast("Ligne modifiée !");
             }
 
             await saveCloudData();
@@ -868,7 +980,7 @@
         }
 
         async function deleteBareme(idx) {
-            if (!confirm("Supprimer cette ligne du barème ?")) return;
+            if (!confirm("Supprimer cette ligne ?")) return;
             dbData.sanctionsData.splice(idx, 1);
             await saveCloudData();
             renderBareme();
@@ -876,7 +988,6 @@
             showToast("Ligne supprimée !");
         }
 
-        // --- TICKET CRUD ---
         async function handleSaveTicket(e) {
             e.preventDefault();
             const idx = parseInt(document.getElementById('edit-ticket-index').value);
@@ -885,10 +996,10 @@
 
             if (idx === -1) {
                 dbData.ticketResponses.push({ title, text });
-                showToast("Modèle de ticket ajouté !");
+                showToast("Modèle ajouté !");
             } else {
                 dbData.ticketResponses[idx] = { title, text };
-                showToast("Modèle de ticket modifié !");
+                showToast("Modèle modifié !");
             }
 
             await saveCloudData();
@@ -915,12 +1026,31 @@
         }
 
         async function deleteTicket(idx) {
-            if (!confirm("Supprimer ce modèle de ticket ?")) return;
+            if (!confirm("Supprimer ce modèle ?")) return;
             dbData.ticketResponses.splice(idx, 1);
             await saveCloudData();
             renderTickets();
             renderAdminPanel();
             showToast("Modèle supprimé !");
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+            showToast("Copié dans le presse-papiers !");
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            if (isError) {
+                toast.classList.add('bg-rose-950', 'border-rose-500/30');
+            } else {
+                toast.classList.remove('bg-rose-950', 'border-rose-500/30');
+            }
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
         }
     </script>
 </body>
