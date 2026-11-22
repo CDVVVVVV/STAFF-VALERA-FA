@@ -319,14 +319,14 @@
                     <h2 class="text-2xl font-extrabold text-amber-400 mb-2 flex items-center">
                         <i class="fa-solid fa-shield-halved mr-3"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : visualisez les connexions et temps de présence, modérez les comptes, les sanctions, les idées et le règlement.</p>
+                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : visualisez les connexions et le temps de présence cumulé inter-sessions, modérez les comptes, les sanctions, les idées et le règlement.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- 1. Staff Management (Connexions, Temps passé, Mots de passe, Strikes) -->
+                    <!-- 1. Staff Management (Connexions, Temps cumulé, Mots de passe, Strikes) -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-users-gear mr-3 text-rose-400"></i> Gestion du Staff & Activité
+                            <i class="fa-solid fa-users-gear mr-3 text-rose-400"></i> Gestion du Staff & Activité Cumulée
                         </h3>
                         <div class="space-y-3 max-h-[480px] overflow-y-auto pr-2 custom-scrollbar" id="admin-staff-list"></div>
                     </div>
@@ -562,7 +562,7 @@
             dbData.staffStats[currentUser.name].logins += 1;
             await saveCloudData();
 
-            // Lancer le compteur de temps passé (toutes les secondes)
+            // Lancer le compteur de temps cumulé (toutes les secondes)
             if (timeInterval) clearInterval(timeInterval);
             timeInterval = setInterval(async () => {
                 if (currentUser) {
@@ -570,7 +570,7 @@
                         dbData.staffStats[currentUser.name] = { logins: 1, seconds: 0 };
                     }
                     dbData.staffStats[currentUser.name].seconds += 1;
-                    // Sauvegarde sur le cloud toutes les 30 secondes pour éviter le spam réseau
+                    // Sauvegarde sur le cloud toutes les 30 secondes pour persister le cumul inter-sessions
                     if (dbData.staffStats[currentUser.name].seconds % 30 === 0) {
                         await saveCloudData();
                     }
@@ -602,7 +602,7 @@
 
         async function handleLogout() {
             if (currentUser) {
-                await saveCloudData(); // Sauvegarde finale du temps
+                await saveCloudData(); // Sauvegarde finale du temps cumulé
             }
             if (timeInterval) clearInterval(timeInterval);
             currentUser = null;
@@ -860,7 +860,7 @@
 
         // --- PANEL ADMIN ---
         function renderAdminPanel() {
-            // 1. Staff Management (Connexions, Temps passé, Mots de passe, Strikes)
+            // 1. Staff Management (Connexions, Temps cumulé, Mots de passe, Strikes)
             const staffList = document.getElementById('admin-staff-list');
             staffList.innerHTML = dbData.staffAccounts.map((acc, index) => {
                 const sanctions = (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[acc.name]) || [];
@@ -883,10 +883,10 @@
                             </div>
                         </div>
 
-                        <!-- STATS DE CONNEXION & TEMPS PASSÉ (SOUS LES STRIKES) -->
+                        <!-- STATS DE CONNEXION & TEMPS CUMULÉ -->
                         <div class="flex items-center justify-between bg-xmasCard/70 border border-xmasBorder px-3 py-2 rounded-xl text-xs">
                             <span class="text-slate-300 flex items-center"><i class="fa-solid fa-right-to-bracket text-emerald-400 mr-1.5"></i> Connexions : <strong class="text-white ml-1">${stats.logins}</strong></span>
-                            <span class="text-slate-300 flex items-center"><i class="fa-regular fa-clock text-amber-400 mr-1.5"></i> Temps : <strong class="text-white ml-1">${formattedTime}</strong></span>
+                            <span class="text-slate-300 flex items-center"><i class="fa-regular fa-clock text-amber-400 mr-1.5"></i> Temps Cumulé : <strong class="text-white ml-1">${formattedTime}</strong></span>
                         </div>
 
                         <!-- MODIFICATION DU MOT DE PASSE EN DIRECT -->
