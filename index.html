@@ -138,6 +138,14 @@
                         <i class="fa-solid fa-house text-sm w-5"></i>
                         <span>Dashboard</span>
                     </button>
+                    <button onclick="switchTab('announcements')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="announcements">
+                        <i class="fa-solid fa-bullhorn text-sm w-5 text-rose-400"></i>
+                        <span>Annonces Staff</span>
+                    </button>
+                    <button onclick="switchTab('patchnotes')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="patchnotes">
+                        <i class="fa-solid fa-code-merge text-sm w-5 text-emerald-400"></i>
+                        <span>Patch Notes</span>
+                    </button>
                     <button onclick="switchTab('rulebook')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3.5 rounded-2xl text-xs font-bold transition-all text-slate-400 hover:text-white hover:bg-white/[0.04]" data-tab="rulebook">
                         <i class="fa-solid fa-book text-sm w-5"></i>
                         <span>Règlement</span>
@@ -207,7 +215,7 @@
                     <div class="relative z-10 max-w-3xl">
                         <span class="inline-block px-3 py-1 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-wider mb-4">Joyeuses Fêtes • Session Sécurisée ❄️</span>
                         <h2 class="text-3xl lg:text-4xl font-extrabold text-white mb-3">Joyeux Noël, <span id="welcome-name" class="text-rose-400"></span> ! 🎄</h2>
-                        <p class="text-sm text-slate-300 leading-relaxed">Bienvenue sur le portail de Noël VALERA RP. Gère tes tickets, consulte le règlement au coin du feu et propose tes idées de fêtes.</p>
+                        <p class="text-sm text-slate-300 leading-relaxed">Bienvenue sur le portail de Noël VALERA RP. Consulte les annonces officielles, les patch notes et gère tes missions.</p>
                     </div>
                 </div>
 
@@ -223,11 +231,11 @@
                     </div>
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
-                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Articles Règlement</span>
-                            <div class="w-10 h-10 rounded-2xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">📜</div>
+                            <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Annonces & Patchs</span>
+                            <div class="w-10 h-10 rounded-2xl bg-emerald-600/10 text-emerald-400 flex items-center justify-center font-bold text-sm border border-emerald-500/20">📢</div>
                         </div>
-                        <p class="text-2xl font-extrabold text-white">11 Chapitres</p>
-                        <p class="text-xs text-slate-500 mt-1">À jour en direct</p>
+                        <p id="dash-notifs-count" class="text-2xl font-extrabold text-white">0</p>
+                        <p class="text-xs text-slate-500 mt-1">Publiés au total</p>
                     </div>
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl glow-card transition-all">
                         <div class="flex items-center justify-between mb-4">
@@ -238,6 +246,24 @@
                         <p class="text-xs text-slate-500 mt-1">Suggestions partagées</p>
                     </div>
                 </div>
+            </div>
+
+            <!-- TAB: ANNONCES STAFF -->
+            <div id="tab-announcements" class="tab-content hidden space-y-6">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white">Annonces Officielles Staff</h2>
+                    <p class="text-sm text-slate-400 mt-1">Cliquez sur une carte d'annonce pour en afficher les détails complets.</p>
+                </div>
+                <div id="announcements-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+
+            <!-- TAB: PATCH NOTES -->
+            <div id="tab-patchnotes" class="tab-content hidden space-y-6">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white">Patch Notes & Mises à Jour</h2>
+                    <p class="text-sm text-slate-400 mt-1">Découvrez les derniers ajouts et correctifs du serveur.</p>
+                </div>
+                <div id="patchnotes-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
             <!-- TAB 2: RULEBOOK -->
@@ -285,7 +311,7 @@
                 <div id="tickets-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </div>
 
-            <!-- TAB 5: MES SANCTIONS (UNIQUEMENT SES SANCTIONS) -->
+            <!-- TAB 5: MES SANCTIONS -->
             <div id="tab-mysanctions" class="tab-content hidden space-y-6">
                 <div class="bg-gradient-to-r from-rose-950/60 via-xmasCard to-xmasCard border border-rose-500/30 rounded-[2rem] p-8 shadow-2xl">
                     <h2 class="text-2xl lg:text-3xl font-extrabold text-white flex items-center mb-2">
@@ -319,108 +345,102 @@
                     <h2 class="text-2xl font-extrabold text-amber-400 mb-2 flex items-center">
                         <i class="fa-solid fa-shield-halved mr-3"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : visualisez les connexions et le temps de présence cumulé inter-sessions, modérez les comptes, les sanctions, les idées et le règlement.</p>
+                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : annonces staff, patch notes, comptes, mots de passe, sanctions et idées.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- 1. Staff Management (Connexions, Temps cumulé, Mots de passe, Strikes) -->
+                    <!-- 1. Staff Management -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-users-gear mr-3 text-rose-400"></i> Gestion du Staff & Activité Cumulée
+                            <i class="fa-solid fa-users-gear mr-3 text-rose-400"></i> Gestion du Staff & Activité
                         </h3>
                         <div class="space-y-3 max-h-[480px] overflow-y-auto pr-2 custom-scrollbar" id="admin-staff-list"></div>
                     </div>
 
-                    <!-- 2. Ideas Moderation in Admin Panel -->
+                    <!-- 2. Gérer les Annonces Staff -->
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-bullhorn mr-3 text-rose-400"></i> Gérer les Annonces Staff
+                        </h3>
+                        <form onsubmit="handleSaveAnnouncement(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-announcement-id" value="">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'Annonce</label>
+                                <input type="text" id="new-announcement-title" placeholder="Ex: Réunion générale ce vendredi" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu</label>
+                                <textarea id="new-announcement-text" rows="3" placeholder="Texte de l'annonce..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="announcement-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Publier l'Annonce</button>
+                                <button type="button" id="announcement-cancel-btn" onclick="resetAnnouncementForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
+                            </div>
+                        </form>
+                        <div class="pt-4 border-t border-xmasBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Annonces Actuelles</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-announcements-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Gérer les Patch Notes -->
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-code-merge mr-3 text-emerald-400"></i> Gérer les Patch Notes
+                        </h3>
+                        <form onsubmit="handleSavePatchNote(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-patchnote-id" value="">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre / Version du Patch</label>
+                                <input type="text" id="new-patchnote-title" placeholder="Ex: Update v1.2 - Correctifs Noël" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Détails du Patch</label>
+                                <textarea id="new-patchnote-text" rows="3" placeholder="Liste des modifications..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="patchnote-submit-btn" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-emerald-600/20 text-sm">+ Publier le Patch Note</button>
+                                <button type="button" id="patchnote-cancel-btn" onclick="resetPatchNoteForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
+                            </div>
+                        </form>
+                        <div class="pt-4 border-t border-xmasBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Patch Notes Actuels</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-patchnotes-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Ideas Moderation -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-lightbulb mr-3 text-amber-400"></i> Modération des Idées Staff
                         </h3>
                         <p class="text-xs text-slate-400">Visualisez et supprimez directement les suggestions postées par l'équipe.</p>
-                        <div class="space-y-2.5 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar" id="admin-ideas-list"></div>
-                    </div>
-
-                    <!-- 3. Rulebook Editor -->
-                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
-                        <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-book-bookmark mr-3 text-rose-400"></i> Éditer le Règlement
-                        </h3>
-                        <form onsubmit="handleSaveArticle(event)" class="space-y-3.5">
-                            <input type="hidden" id="edit-article-index" value="-1">
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'Article</label>
-                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu</label>
-                                <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button type="submit" id="article-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter l'Article</button>
-                                <button type="button" id="article-cancel-btn" onclick="resetArticleForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
-                            </div>
-                        </form>
-                        <div class="pt-4 border-t border-xmasBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels</h4>
-                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-rulebook-list"></div>
-                        </div>
-                    </div>
-
-                    <!-- 4. Bareme Editor -->
-                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
-                        <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-gavel mr-3 text-rose-400"></i> Gérer le Barème
-                        </h3>
-                        <form onsubmit="handleSaveBareme(event)" class="space-y-3.5">
-                            <input type="hidden" id="edit-bareme-index" value="-1">
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Motif / Infraction</label>
-                                <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sanction Appliquée</label>
-                                <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button type="submit" id="bareme-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter au Barème</button>
-                                <button type="button" id="bareme-cancel-btn" onclick="resetBaremeForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
-                            </div>
-                        </form>
-                        <div class="pt-4 border-t border-xmasBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel</h4>
-                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-bareme-list"></div>
-                        </div>
-                    </div>
-
-                    <!-- 5. Ticket Editor -->
-                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
-                        <h3 class="text-lg font-bold text-white flex items-center">
-                            <i class="fa-solid fa-ticket mr-3 text-rose-400"></i> Gérer les Modèles Tickets
-                        </h3>
-                        <form onsubmit="handleSaveTicket(event)" class="space-y-3.5">
-                            <input type="hidden" id="edit-ticket-index" value="-1">
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre du Modèle</label>
-                                <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Texte de la Réponse</label>
-                                <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button type="submit" id="ticket-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter le Modèle</button>
-                                <button type="button" id="ticket-cancel-btn" onclick="resetTicketForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
-                            </div>
-                        </form>
-                        <div class="pt-4 border-t border-xmasBorder">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels</h4>
-                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-ticket-list"></div>
-                        </div>
+                        <div class="space-y-2.5 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar" id="admin-ideas-list"></div>
                     </div>
                 </div>
             </div>
 
         </main>
+    </div>
+
+    <!-- MODAL LECTURE CARTE (ANNONCE OU PATCH NOTE) -->
+    <div id="reader-modal" class="fixed inset-0 z-50 bg-[#080512]/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-xmasBorder rounded-[2.5rem] w-full max-w-lg p-8 shadow-2xl space-y-6 glow-main">
+            <div class="flex items-center justify-between">
+                <span id="reader-badge" class="text-xs font-bold px-3 py-1 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20">Annonce</span>
+                <button onclick="closeReaderModal()" class="w-9 h-9 rounded-xl bg-xmasBg text-slate-400 hover:text-white flex items-center justify-center border border-xmasBorder transition-all">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div>
+                <h3 id="reader-title" class="text-xl font-extrabold text-white mb-2"></h3>
+                <p id="reader-date" class="text-xs text-slate-500 mb-4"></p>
+                <div id="reader-text" class="text-sm text-slate-300 leading-relaxed bg-xmasBg p-5 rounded-2xl border border-xmasBorder/60 whitespace-pre-line font-medium"></div>
+            </div>
+            <button onclick="closeReaderModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3.5 rounded-2xl transition-all text-sm">
+                Fermer
+            </button>
+        </div>
     </div>
 
     <!-- MODAL PROPOSER UNE IDÉE -->
@@ -504,6 +524,8 @@
                 if (!dbData.ideas) dbData.ideas = [];
                 if (!dbData.staffPersonalSanctions) dbData.staffPersonalSanctions = {};
                 if (!dbData.staffStats) dbData.staffStats = {};
+                if (!dbData.announcements) dbData.announcements = [];
+                if (!dbData.patchNotes) dbData.patchNotes = [];
             } catch (err) {
                 console.error("Erreur chargement cloud:", err);
                 alert("Erreur de connexion au cloud JSONBin.io.");
@@ -554,7 +576,6 @@
 
             currentUser = account;
 
-            // Incrémenter les connexions et initialiser les stats si besoin
             if (!dbData.staffStats) dbData.staffStats = {};
             if (!dbData.staffStats[currentUser.name]) {
                 dbData.staffStats[currentUser.name] = { logins: 0, seconds: 0 };
@@ -562,7 +583,6 @@
             dbData.staffStats[currentUser.name].logins += 1;
             await saveCloudData();
 
-            // Lancer le compteur de temps cumulé (toutes les secondes)
             if (timeInterval) clearInterval(timeInterval);
             timeInterval = setInterval(async () => {
                 if (currentUser) {
@@ -570,7 +590,6 @@
                         dbData.staffStats[currentUser.name] = { logins: 1, seconds: 0 };
                     }
                     dbData.staffStats[currentUser.name].seconds += 1;
-                    // Sauvegarde sur le cloud toutes les 30 secondes pour persister le cumul inter-sessions
                     if (dbData.staffStats[currentUser.name].seconds % 30 === 0) {
                         await saveCloudData();
                     }
@@ -602,7 +621,7 @@
 
         async function handleLogout() {
             if (currentUser) {
-                await saveCloudData(); // Sauvegarde finale du temps cumulé
+                await saveCloudData();
             }
             if (timeInterval) clearInterval(timeInterval);
             currentUser = null;
@@ -631,6 +650,8 @@
             if (tabName === 'admin') renderAdminPanel();
             if (tabName === 'ideas') renderIdeas();
             if (tabName === 'mysanctions') renderMySanctions();
+            if (tabName === 'announcements') renderAnnouncements();
+            if (tabName === 'patchnotes') renderPatchNotes();
         }
 
         function renderApp() {
@@ -640,11 +661,78 @@
             renderTickets();
             renderIdeas();
             renderMySanctions();
+            renderAnnouncements();
+            renderPatchNotes();
         }
 
         function renderDashboard() {
             document.getElementById('dash-staff-count').textContent = dbData.staffAccounts.length + " Actifs";
             document.getElementById('dash-ideas-count').textContent = dbData.ideas ? dbData.ideas.length : 0;
+            const totalNotifs = (dbData.announcements ? dbData.announcements.length : 0) + (dbData.patchNotes ? dbData.patchNotes.length : 0);
+            document.getElementById('dash-notifs-count').textContent = totalNotifs;
+        }
+
+        // --- RENDER ANNOUNCEMENTS & PATCH NOTES (CARDS) ---
+        function renderAnnouncements() {
+            const container = document.getElementById('announcements-container');
+            if (!dbData.announcements || dbData.announcements.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-sm italic col-span-2 text-center py-12">Aucune annonce staff pour le moment.</p>';
+                return;
+            }
+
+            container.innerHTML = dbData.announcements.map(ann => `
+                <div onclick="openReader('Annonce Staff', '${ann.title.replace(/'/g, "\\'")}', '${ann.date || ''}', '${ann.text.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" class="glass-card border border-xmasBorder hover:border-rose-500/50 rounded-[2rem] p-6 cursor-pointer transition-all shadow-xl glow-card group flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold px-3 py-1 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20">📢 Annonce</span>
+                            <span class="text-[11px] text-slate-500">${ann.date || ''}</span>
+                        </div>
+                        <h4 class="font-extrabold text-white text-base mb-2 group-hover:text-rose-400 transition-colors">${ann.title}</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed bg-xmasBg p-4 rounded-2xl border border-xmasBorder/60 line-clamp-3 font-medium">${ann.text}</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-xmasBorder flex items-center justify-between text-xs text-rose-400 font-bold">
+                        <span>Lire l'annonce complète</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPatchNotes() {
+            const container = document.getElementById('patchnotes-container');
+            if (!dbData.patchNotes || dbData.patchNotes.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-sm italic col-span-2 text-center py-12">Aucun patch note publié pour le moment.</p>';
+                return;
+            }
+
+            container.innerHTML = dbData.patchNotes.map(pn => `
+                <div onclick="openReader('Patch Note', '${pn.title.replace(/'/g, "\\'")}', '${pn.date || ''}', '${pn.text.replace(/'/g, "\\'").replace(/\n/g, '\\n')}')" class="glass-card border border-xmasBorder hover:border-emerald-500/50 rounded-[2rem] p-6 cursor-pointer transition-all shadow-xl glow-card group flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">🚀 Patch Note</span>
+                            <span class="text-[11px] text-slate-500">${pn.date || ''}</span>
+                        </div>
+                        <h4 class="font-extrabold text-white text-base mb-2 group-hover:text-emerald-400 transition-colors">${pn.title}</h4>
+                        <p class="text-xs text-slate-400 leading-relaxed bg-xmasBg p-4 rounded-2xl border border-xmasBorder/60 line-clamp-3 font-medium">${pn.text}</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-xmasBorder flex items-center justify-between text-xs text-emerald-400 font-bold">
+                        <span>Voir les détails du patch</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openReader(badge, title, date, text) {
+            document.getElementById('reader-badge').textContent = badge;
+            document.getElementById('reader-title').textContent = title;
+            document.getElementById('reader-date').textContent = date ? `Publié le ${date}` : '';
+            document.getElementById('reader-text').textContent = text;
+            document.getElementById('reader-modal').classList.remove('hidden');
+        }
+
+        function closeReaderModal() {
+            document.getElementById('reader-modal').classList.add('hidden');
         }
 
         function renderMySanctions() {
@@ -844,23 +932,18 @@
             showToast("Idée supprimée !");
         }
 
-        // Fonction pour formetter le temps en Heures / Minutes / Secondes
         function formatTime(totalSeconds) {
             const h = Math.floor(totalSeconds / 3600);
             const m = Math.floor((totalSeconds % 3600) / 60);
             const s = totalSeconds % 60;
-            if (h > 0) {
-                return `${h}h ${m}m ${s}s`;
-            } else if (m > 0) {
-                return `${m}m ${s}s`;
-            } else {
-                return `${s}s`;
-            }
+            if (h > 0) return `${h}h ${m}m ${s}s`;
+            if (m > 0) return `${m}m ${s}s`;
+            return `${s}s`;
         }
 
         // --- PANEL ADMIN ---
         function renderAdminPanel() {
-            // 1. Staff Management (Connexions, Temps cumulé, Mots de passe, Strikes)
+            // 1. Staff Management
             const staffList = document.getElementById('admin-staff-list');
             staffList.innerHTML = dbData.staffAccounts.map((acc, index) => {
                 const sanctions = (dbData.staffPersonalSanctions && dbData.staffPersonalSanctions[acc.name]) || [];
@@ -883,13 +966,11 @@
                             </div>
                         </div>
 
-                        <!-- STATS DE CONNEXION & TEMPS CUMULÉ -->
                         <div class="flex items-center justify-between bg-xmasCard/70 border border-xmasBorder px-3 py-2 rounded-xl text-xs">
                             <span class="text-slate-300 flex items-center"><i class="fa-solid fa-right-to-bracket text-emerald-400 mr-1.5"></i> Connexions : <strong class="text-white ml-1">${stats.logins}</strong></span>
                             <span class="text-slate-300 flex items-center"><i class="fa-regular fa-clock text-amber-400 mr-1.5"></i> Temps Cumulé : <strong class="text-white ml-1">${formattedTime}</strong></span>
                         </div>
 
-                        <!-- MODIFICATION DU MOT DE PASSE EN DIRECT -->
                         <div class="flex items-center space-x-2 pt-2 border-t border-xmasBorder/50">
                             <span class="text-[10px] font-bold uppercase text-slate-400 shrink-0">Mot de passe :</span>
                             <input type="text" id="pwd-input-${index}" value="${acc.password}" class="bg-xmasCard border border-xmasBorder rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500 flex-1 font-mono">
@@ -913,7 +994,31 @@
                 `;
             }).join('');
 
-            // 2. Ideas Moderation List in Admin
+            // 2. Announcements Admin List
+            const annList = document.getElementById('admin-announcements-list');
+            annList.innerHTML = (dbData.announcements || []).map((ann, idx) => `
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${ann.title}</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="editAnnouncement(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteAnnouncement(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-xs italic">Aucune annonce.</p>';
+
+            // 3. Patch Notes Admin List
+            const pnList = document.getElementById('admin-patchnotes-list');
+            pnList.innerHTML = (dbData.patchNotes || []).map((pn, idx) => `
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${pn.title}</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="editPatchNote(${idx})" class="text-emerald-400 hover:text-emerald-300 px-2.5 py-1 bg-emerald-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deletePatchNote(${idx})" class="text-emerald-400 hover:text-emerald-300 px-2.5 py-1 bg-emerald-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-xs italic">Aucun patch note.</p>';
+
+            // 4. Ideas Moderation List in Admin
             const adminIdeasContainer = document.getElementById('admin-ideas-list');
             if (!dbData.ideas || dbData.ideas.length === 0) {
                 adminIdeasContainer.innerHTML = '<p class="text-slate-500 text-xs italic">Aucune idée postée.</p>';
@@ -928,42 +1033,114 @@
                     </div>
                 `).join('');
             }
+        }
 
-            // 3. Rulebook List
-            const ruleList = document.getElementById('admin-rulebook-list');
-            ruleList.innerHTML = dbData.staffParts.map((art, idx) => `
-                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
-                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${art.title}</span>
-                    <div class="flex items-center space-x-1.5">
-                        <button onclick="editArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
+        // --- ANNOUNCEMENTS ADMIN FUNCTIONS ---
+        async function handleSaveAnnouncement(e) {
+            e.preventDefault();
+            const idVal = document.getElementById('edit-announcement-id').value;
+            const title = document.getElementById('new-announcement-title').value;
+            const text = document.getElementById('new-announcement-text').value;
+            const dateStr = new Date().toLocaleDateString('fr-FR');
 
-            // 4. Bareme List
-            const baremeList = document.getElementById('admin-bareme-list');
-            baremeList.innerHTML = dbData.sanctionsData.map((item, idx) => `
-                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
-                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${item.motif}</span>
-                    <div class="flex items-center space-x-1.5">
-                        <button onclick="editBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
+            if (!dbData.announcements) dbData.announcements = [];
 
-            // 5. Ticket List
-            const ticketList = document.getElementById('admin-ticket-list');
-            ticketList.innerHTML = dbData.ticketResponses.map((t, idx) => `
-                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
-                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${t.title}</span>
-                    <div class="flex items-center space-x-1.5">
-                        <button onclick="editTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
+            if (idVal === "") {
+                dbData.announcements.unshift({ id: Date.now(), title, text, date: dateStr });
+                showToast("Annonce publiée !");
+            } else {
+                const idx = parseInt(idVal);
+                dbData.announcements[idx].title = title;
+                dbData.announcements[idx].text = text;
+                showToast("Annonce modifiée !");
+            }
+
+            await saveCloudData();
+            resetAnnouncementForm();
+            renderAnnouncements();
+            renderAdminPanel();
+            renderDashboard();
+        }
+
+        function editAnnouncement(idx) {
+            const ann = dbData.announcements[idx];
+            document.getElementById('edit-announcement-id').value = idx;
+            document.getElementById('new-announcement-title').value = ann.title;
+            document.getElementById('new-announcement-text').value = ann.text;
+            document.getElementById('announcement-submit-btn').textContent = "Modifier l'Annonce";
+            document.getElementById('announcement-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetAnnouncementForm() {
+            document.getElementById('edit-announcement-id').value = "";
+            document.getElementById('new-announcement-title').value = '';
+            document.getElementById('new-announcement-text').value = '';
+            document.getElementById('announcement-submit-btn').textContent = "+ Publier l'Annonce";
+            document.getElementById('announcement-cancel-btn').classList.add('hidden');
+        }
+
+        async function deleteAnnouncement(idx) {
+            if (!confirm("Supprimer cette annonce ?")) return;
+            dbData.announcements.splice(idx, 1);
+            await saveCloudData();
+            renderAnnouncements();
+            renderAdminPanel();
+            renderDashboard();
+            showToast("Annonce supprimée !");
+        }
+
+        // --- PATCH NOTES ADMIN FUNCTIONS ---
+        async function handleSavePatchNote(e) {
+            e.preventDefault();
+            const idVal = document.getElementById('edit-patchnote-id').value;
+            const title = document.getElementById('new-patchnote-title').value;
+            const text = document.getElementById('new-patchnote-text').value;
+            const dateStr = new Date().toLocaleDateString('fr-FR');
+
+            if (!dbData.patchNotes) dbData.patchNotes = [];
+
+            if (idVal === "") {
+                dbData.patchNotes.unshift({ id: Date.now(), title, text, date: dateStr });
+                showToast("Patch note publié !");
+            } else {
+                const idx = parseInt(idVal);
+                dbData.patchNotes[idx].title = title;
+                dbData.patchNotes[idx].text = text;
+                showToast("Patch note modifié !");
+            }
+
+            await saveCloudData();
+            resetPatchNoteForm();
+            renderPatchNotes();
+            renderAdminPanel();
+            renderDashboard();
+        }
+
+        function editPatchNote(idx) {
+            const pn = dbData.patchNotes[idx];
+            document.getElementById('edit-patchnote-id').value = idx;
+            document.getElementById('new-patchnote-title').value = pn.title;
+            document.getElementById('new-patchnote-text').value = pn.text;
+            document.getElementById('patchnote-submit-btn').textContent = "Modifier le Patch Note";
+            document.getElementById('patchnote-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetPatchNoteForm() {
+            document.getElementById('edit-patchnote-id').value = "";
+            document.getElementById('new-patchnote-title').value = '';
+            document.getElementById('new-patchnote-text').value = '';
+            document.getElementById('patchnote-submit-btn').textContent = "+ Publier le Patch Note";
+            document.getElementById('patchnote-cancel-btn').classList.add('hidden');
+        }
+
+        async function deletePatchNote(idx) {
+            if (!confirm("Supprimer ce patch note ?")) return;
+            dbData.patchNotes.splice(idx, 1);
+            await saveCloudData();
+            renderPatchNotes();
+            renderAdminPanel();
+            renderDashboard();
+            showToast("Patch note supprimé !");
         }
 
         async function updateStaffPassword(index) {
@@ -993,12 +1170,8 @@
             if (!confirm(`Voulez-vous vraiment virer ${staffName} et lui retirer tout accès au portail ?`)) return;
             
             dbData.staffAccounts = dbData.staffAccounts.filter(acc => acc.name !== staffName);
-            if (dbData.staffPersonalSanctions[staffName]) {
-                delete dbData.staffPersonalSanctions[staffName];
-            }
-            if (dbData.staffStats && dbData.staffStats[staffName]) {
-                delete dbData.staffStats[staffName];
-            }
+            if (dbData.staffPersonalSanctions[staffName]) delete dbData.staffPersonalSanctions[staffName];
+            if (dbData.staffStats && dbData.staffStats[staffName]) delete dbData.staffStats[staffName];
             await saveCloudData();
             renderAdminPanel();
             initLoginDropdown();
@@ -1010,9 +1183,7 @@
             if (!reason) return;
             const dateStr = new Date().toLocaleDateString('fr-FR') + ' à ' + new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'});
             
-            if (!dbData.staffPersonalSanctions[staffName]) {
-                dbData.staffPersonalSanctions[staffName] = [];
-            }
+            if (!dbData.staffPersonalSanctions[staffName]) dbData.staffPersonalSanctions[staffName] = [];
             dbData.staffPersonalSanctions[staffName].push({ reason, date: dateStr });
             await saveCloudData();
             renderAdminPanel();
@@ -1027,144 +1198,6 @@
                 renderAdminPanel();
                 showToast("Sanction retirée avec succès !");
             }
-        }
-
-        async function handleSaveArticle(e) {
-            e.preventDefault();
-            const idx = parseInt(document.getElementById('edit-article-index').value);
-            const title = document.getElementById('new-article-title').value;
-            const text = document.getElementById('new-article-text').value;
-
-            if (idx === -1) {
-                dbData.staffParts.push({ title, text });
-                showToast("Article ajouté au cloud !");
-            } else {
-                dbData.staffParts[idx] = { title, text };
-                showToast("Article modifié !");
-            }
-
-            await saveCloudData();
-            resetArticleForm();
-            renderRulebook();
-            renderAdminPanel();
-        }
-
-        function editArticle(idx) {
-            const art = dbData.staffParts[idx];
-            document.getElementById('edit-article-index').value = idx;
-            document.getElementById('new-article-title').value = art.title;
-            document.getElementById('new-article-text').value = art.text;
-            document.getElementById('article-submit-btn').textContent = "Modifier l'Article";
-            document.getElementById('article-cancel-btn').classList.remove('hidden');
-        }
-
-        function resetArticleForm() {
-            document.getElementById('edit-article-index').value = "-1";
-            document.getElementById('new-article-title').value = '';
-            document.getElementById('new-article-text').value = '';
-            document.getElementById('article-submit-btn').textContent = "+ Ajouter l'Article";
-            document.getElementById('article-cancel-btn').classList.add('hidden');
-        }
-
-        async function deleteArticle(idx) {
-            if (!confirm("Supprimer cet article ?")) return;
-            dbData.staffParts.splice(idx, 1);
-            await saveCloudData();
-            renderRulebook();
-            renderAdminPanel();
-            showToast("Article supprimé !");
-        }
-
-        async function handleSaveBareme(e) {
-            e.preventDefault();
-            const idx = parseInt(document.getElementById('edit-bareme-index').value);
-            const motif = document.getElementById('new-bareme-motif').value;
-            const sanction = document.getElementById('new-bareme-sanction').value;
-
-            if (idx === -1) {
-                dbData.sanctionsData.push({ motif, sanction });
-                showToast("Barème mis à jour !");
-            } else {
-                dbData.sanctionsData[idx] = { motif, sanction };
-                showToast("Ligne modifiée !");
-            }
-
-            await saveCloudData();
-            resetBaremeForm();
-            renderBareme();
-            renderAdminPanel();
-        }
-
-        function editBareme(idx) {
-            const item = dbData.sanctionsData[idx];
-            document.getElementById('edit-bareme-index').value = idx;
-            document.getElementById('new-bareme-motif').value = item.motif;
-            document.getElementById('new-bareme-sanction').value = item.sanction;
-            document.getElementById('bareme-submit-btn').textContent = "Modifier le Barème";
-            document.getElementById('bareme-cancel-btn').classList.remove('hidden');
-        }
-
-        function resetBaremeForm() {
-            document.getElementById('edit-bareme-index').value = "-1";
-            document.getElementById('new-bareme-motif').value = '';
-            document.getElementById('new-bareme-sanction').value = '';
-            document.getElementById('bareme-submit-btn').textContent = "+ Ajouter au Barème";
-            document.getElementById('bareme-cancel-btn').classList.add('hidden');
-        }
-
-        async function deleteBareme(idx) {
-            if (!confirm("Supprimer cette ligne ?")) return;
-            dbData.sanctionsData.splice(idx, 1);
-            await saveCloudData();
-            renderBareme();
-            renderAdminPanel();
-            showToast("Ligne supprimée !");
-        }
-
-        async function handleSaveTicket(e) {
-            e.preventDefault();
-            const idx = parseInt(document.getElementById('edit-ticket-index').value);
-            const title = document.getElementById('new-ticket-title').value;
-            const text = document.getElementById('new-ticket-text').value;
-
-            if (idx === -1) {
-                dbData.ticketResponses.push({ title, text });
-                showToast("Modèle ajouté !");
-            } else {
-                dbData.ticketResponses[idx] = { title, text };
-                showToast("Modèle modifié !");
-            }
-
-            await saveCloudData();
-            resetTicketForm();
-            renderTickets();
-            renderAdminPanel();
-        }
-
-        function editTicket(idx) {
-            const t = dbData.ticketResponses[idx];
-            document.getElementById('edit-ticket-index').value = idx;
-            document.getElementById('new-ticket-title').value = t.title;
-            document.getElementById('new-ticket-text').value = t.text;
-            document.getElementById('ticket-submit-btn').textContent = "Modifier le Modèle";
-            document.getElementById('ticket-cancel-btn').classList.remove('hidden');
-        }
-
-        function resetTicketForm() {
-            document.getElementById('edit-ticket-index').value = "-1";
-            document.getElementById('new-ticket-title').value = '';
-            document.getElementById('new-ticket-text').value = '';
-            document.getElementById('ticket-submit-btn').textContent = "+ Ajouter le Modèle";
-            document.getElementById('ticket-cancel-btn').classList.add('hidden');
-        }
-
-        async function deleteTicket(idx) {
-            if (!confirm("Supprimer ce modèle ?")) return;
-            dbData.ticketResponses.splice(idx, 1);
-            await saveCloudData();
-            renderTickets();
-            renderAdminPanel();
-            showToast("Modèle supprimé !");
         }
 
         function copyToClipboard(text) {
