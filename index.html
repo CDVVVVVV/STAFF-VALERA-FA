@@ -345,7 +345,7 @@
                     <h2 class="text-2xl font-extrabold text-amber-400 mb-2 flex items-center">
                         <i class="fa-solid fa-shield-halved mr-3"></i> Panel Admin (Contrôle Total à 100%)
                     </h2>
-                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : annonces staff, patch notes, comptes, mots de passe, sanctions et idées.</p>
+                    <p class="text-sm text-slate-300">Gérez tout en direct sur le cloud : staff, connexions, temps cumulé, annonces, patch notes, règlement, barème, tickets et idées.</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -409,8 +409,86 @@
                         </div>
                     </div>
 
-                    <!-- 4. Ideas Moderation -->
+                    <!-- 4. Rulebook Editor -->
                     <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-book-bookmark mr-3 text-rose-400"></i> Éditer le Règlement
+                        </h3>
+                        <form onsubmit="handleSaveArticle(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-article-index" value="-1">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre de l'Article</label>
+                                <input type="text" id="new-article-title" placeholder="Ex: 12. Nouveau Chapitre" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Contenu</label>
+                                <textarea id="new-article-text" rows="3" placeholder="Contenu de l'article..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="article-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter l'Article</button>
+                                <button type="button" id="article-cancel-btn" onclick="resetArticleForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
+                            </div>
+                        </form>
+                        <div class="pt-4 border-t border-xmasBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Articles Actuels</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-rulebook-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Bareme Editor -->
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-gavel mr-3 text-rose-400"></i> Gérer le Barème
+                        </h3>
+                        <form onsubmit="handleSaveBareme(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-bareme-index" value="-1">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Motif / Infraction</label>
+                                <input type="text" id="new-bareme-motif" placeholder="Ex: Freekill" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Sanction Appliquée</label>
+                                <input type="text" id="new-bareme-sanction" placeholder="Ex: Ban 3 jours" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="bareme-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter au Barème</button>
+                                <button type="button" id="bareme-cancel-btn" onclick="resetBaremeForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
+                            </div>
+                        </form>
+                        <div class="pt-4 border-t border-xmasBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Barème Actuel</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-bareme-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Ticket Editor -->
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center">
+                            <i class="fa-solid fa-ticket mr-3 text-rose-400"></i> Gérer les Modèles Tickets
+                        </h3>
+                        <form onsubmit="handleSaveTicket(event)" class="space-y-3.5">
+                            <input type="hidden" id="edit-ticket-index" value="-1">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Titre du Modèle</label>
+                                <input type="text" id="new-ticket-title" placeholder="Ex: Remboursement Validé" class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Texte de la Réponse</label>
+                                <textarea id="new-ticket-text" rows="3" placeholder="Bonjour..." class="w-full bg-xmasBg border border-xmasBorder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500 font-medium leading-relaxed" required></textarea>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button type="submit" id="ticket-submit-btn" class="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 rounded-2xl transition-all shadow-lg shadow-rose-600/20 text-sm">+ Ajouter le Modèle</button>
+                                <button type="button" id="ticket-cancel-btn" onclick="resetTicketForm()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-3 rounded-2xl text-xs font-bold">Annuler</button>
+                            </div>
+                        </form>
+                        <div class="pt-4 border-t border-xmasBorder">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Modèles Actuels</h4>
+                            <div class="space-y-2 max-h-[140px] overflow-y-auto custom-scrollbar" id="admin-ticket-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- 7. Ideas Moderation -->
+                    <div class="glass-card border border-xmasBorder rounded-[2rem] p-6 shadow-xl space-y-4 lg:col-span-2">
                         <h3 class="text-lg font-bold text-white flex items-center">
                             <i class="fa-solid fa-lightbulb mr-3 text-amber-400"></i> Modération des Idées Staff
                         </h3>
@@ -526,6 +604,9 @@
                 if (!dbData.staffStats) dbData.staffStats = {};
                 if (!dbData.announcements) dbData.announcements = [];
                 if (!dbData.patchNotes) dbData.patchNotes = [];
+                if (!dbData.staffParts) dbData.staffParts = [];
+                if (!dbData.sanctionsData) dbData.sanctionsData = [];
+                if (!dbData.ticketResponses) dbData.ticketResponses = [];
             } catch (err) {
                 console.error("Erreur chargement cloud:", err);
                 alert("Erreur de connexion au cloud JSONBin.io.");
@@ -763,7 +844,7 @@
 
         function renderRulebook() {
             const container = document.getElementById('rulebook-container');
-            container.innerHTML = dbData.staffParts.map((art, idx) => `
+            container.innerHTML = (dbData.staffParts || []).map((art, idx) => `
                 <div class="glass-card border border-xmasBorder rounded-[2rem] overflow-hidden shadow-xl transition-all">
                     <button onclick="toggleArticle(${idx})" class="w-full px-7 py-6 text-left font-bold text-white flex items-center justify-between hover:bg-white/[0.02] transition-colors">
                         <span class="text-base">${art.title}</span>
@@ -787,7 +868,7 @@
 
         function renderBareme() {
             const tbody = document.getElementById('bareme-tbody');
-            tbody.innerHTML = dbData.sanctionsData.map(item => `
+            tbody.innerHTML = (dbData.sanctionsData || []).map(item => `
                 <tr class="hover:bg-white/[0.02] transition-colors border-b border-xmasBorder">
                     <td class="p-5 font-bold text-white">${item.motif}</td>
                     <td class="p-5 text-rose-400 font-extrabold">${item.sanction}</td>
@@ -806,7 +887,7 @@
 
         function renderTickets() {
             const container = document.getElementById('tickets-container');
-            container.innerHTML = dbData.ticketResponses.map(t => `
+            container.innerHTML = (dbData.ticketResponses || []).map(t => `
                 <div onclick="copyToClipboard('${t.text.replace(/'/g, "\\'")}')" class="glass-card border border-xmasBorder hover:border-rose-500/50 rounded-[2rem] p-6 cursor-pointer transition-all shadow-xl glow-card group flex flex-col justify-between">
                     <div>
                         <h4 class="font-bold text-white mb-3 group-hover:text-rose-400 transition-colors flex items-center justify-between text-base">
@@ -1018,7 +1099,43 @@
                 </div>
             `).join('') || '<p class="text-slate-500 text-xs italic">Aucun patch note.</p>';
 
-            // 4. Ideas Moderation List in Admin
+            // 4. Rulebook List
+            const ruleList = document.getElementById('admin-rulebook-list');
+            ruleList.innerHTML = (dbData.staffParts || []).map((art, idx) => `
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${art.title}</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="editArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteArticle(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-xs italic">Aucun article.</p>';
+
+            // 5. Bareme List
+            const baremeList = document.getElementById('admin-bareme-list');
+            baremeList.innerHTML = (dbData.sanctionsData || []).map((item, idx) => `
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${item.motif}</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="editBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteBareme(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-xs italic">Aucune règle.</p>';
+
+            // 6. Ticket List
+            const ticketList = document.getElementById('admin-ticket-list');
+            ticketList.innerHTML = (dbData.ticketResponses || []).map((t, idx) => `
+                <div class="bg-xmasBg border border-xmasBorder p-3 rounded-2xl flex items-center justify-between text-xs">
+                    <span class="font-medium text-slate-300 truncate max-w-[180px]">${t.title}</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="editTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteTicket(${idx})" class="text-rose-400 hover:text-rose-300 px-2.5 py-1 bg-rose-500/10 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-slate-500 text-xs italic">Aucun modèle.</p>';
+
+            // 7. Ideas Moderation List in Admin
             const adminIdeasContainer = document.getElementById('admin-ideas-list');
             if (!dbData.ideas || dbData.ideas.length === 0) {
                 adminIdeasContainer.innerHTML = '<p class="text-slate-500 text-xs italic">Aucune idée postée.</p>';
@@ -1141,6 +1258,153 @@
             renderAdminPanel();
             renderDashboard();
             showToast("Patch note supprimé !");
+        }
+
+        // --- RULEBOOK ADMIN ---
+        async function handleSaveArticle(e) {
+            e.preventDefault();
+            const idx = parseInt(document.getElementById('edit-article-index').value);
+            const title = document.getElementById('new-article-title').value;
+            const text = document.getElementById('new-article-text').value;
+
+            if (!dbData.staffParts) dbData.staffParts = [];
+
+            if (idx === -1) {
+                dbData.staffParts.push({ title, text });
+                showToast("Article ajouté au cloud !");
+            } else {
+                dbData.staffParts[idx] = { title, text };
+                showToast("Article modifié !");
+            }
+
+            await saveCloudData();
+            resetArticleForm();
+            renderRulebook();
+            renderAdminPanel();
+        }
+
+        function editArticle(idx) {
+            const art = dbData.staffParts[idx];
+            document.getElementById('edit-article-index').value = idx;
+            document.getElementById('new-article-title').value = art.title;
+            document.getElementById('new-article-text').value = art.text;
+            document.getElementById('article-submit-btn').textContent = "Modifier l'Article";
+            document.getElementById('article-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetArticleForm() {
+            document.getElementById('edit-article-index').value = "-1";
+            document.getElementById('new-article-title').value = '';
+            document.getElementById('new-article-text').value = '';
+            document.getElementById('article-submit-btn').textContent = "+ Ajouter l'Article";
+            document.getElementById('article-cancel-btn').classList.add('hidden');
+        }
+
+        async function deleteArticle(idx) {
+            if (!confirm("Supprimer cet article ?")) return;
+            dbData.staffParts.splice(idx, 1);
+            await saveCloudData();
+            renderRulebook();
+            renderAdminPanel();
+            showToast("Article supprimé !");
+        }
+
+        // --- BAREME ADMIN ---
+        async function handleSaveBareme(e) {
+            e.preventDefault();
+            const idx = parseInt(document.getElementById('edit-bareme-index').value);
+            const motif = document.getElementById('new-bareme-motif').value;
+            const sanction = document.getElementById('new-bareme-sanction').value;
+
+            if (!dbData.sanctionsData) dbData.sanctionsData = [];
+
+            if (idx === -1) {
+                dbData.sanctionsData.push({ motif, sanction });
+                showToast("Barème mis à jour !");
+            } else {
+                dbData.sanctionsData[idx] = { motif, sanction };
+                showToast("Ligne modifiée !");
+            }
+
+            await saveCloudData();
+            resetBaremeForm();
+            renderBareme();
+            renderAdminPanel();
+        }
+
+        function editBareme(idx) {
+            const item = dbData.sanctionsData[idx];
+            document.getElementById('edit-bareme-index').value = idx;
+            document.getElementById('new-bareme-motif').value = item.motif;
+            document.getElementById('new-bareme-sanction').value = item.sanction;
+            document.getElementById('bareme-submit-btn').textContent = "Modifier le Barème";
+            document.getElementById('bareme-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetBaremeForm() {
+            document.getElementById('edit-bareme-index').value = "-1";
+            document.getElementById('new-bareme-motif').value = '';
+            document.getElementById('new-bareme-sanction').value = '';
+            document.getElementById('bareme-submit-btn').textContent = "+ Ajouter au Barème";
+            document.getElementById('bareme-cancel-btn').classList.add('hidden');
+        }
+
+        async function deleteBareme(idx) {
+            if (!confirm("Supprimer cette ligne ?")) return;
+            dbData.sanctionsData.splice(idx, 1);
+            await saveCloudData();
+            renderBareme();
+            renderAdminPanel();
+            showToast("Ligne supprimée !");
+        }
+
+        // --- TICKETS ADMIN ---
+        async function handleSaveTicket(e) {
+            e.preventDefault();
+            const idx = parseInt(document.getElementById('edit-ticket-index').value);
+            const title = document.getElementById('new-ticket-title').value;
+            const text = document.getElementById('new-ticket-text').value;
+
+            if (!dbData.ticketResponses) dbData.ticketResponses = [];
+
+            if (idx === -1) {
+                dbData.ticketResponses.push({ title, text });
+                showToast("Modèle ajouté !");
+            } else {
+                dbData.ticketResponses[idx] = { title, text };
+                showToast("Modèle modifié !");
+            }
+
+            await saveCloudData();
+            resetTicketForm();
+            renderTickets();
+            renderAdminPanel();
+        }
+
+        function editTicket(idx) {
+            const t = dbData.ticketResponses[idx];
+            document.getElementById('edit-ticket-index').value = idx;
+            document.getElementById('new-ticket-title').value = t.title;
+            document.getElementById('new-ticket-text').value = t.text;
+            document.getElementById('ticket-submit-btn').textContent = "Modifier le Modèle";
+            document.getElementById('ticket-cancel-btn').classList.remove('hidden');
+        }
+
+        function resetTicketForm() {
+            document.getElementById('edit-ticket-index').value = "-1";
+            document.getElementById('new-ticket-title').value = '';
+            document.getElementById('new-ticket-text').value = '';
+            document.getElementById('ticket-submit-btn').textContent = "+ Ajouter le Modèle";
+            document.getElementById('ticket-cancel-btn').classList.add('hidden');
+        }
+
+        async function deleteTicket(idx) {
+            if (!confirm("Supprimer ce modèle ?")) return;
+            dbData.ticketResponses.splice(idx, 1);
+            await saveCloudData();
+            renderTickets();
+            renderAdminPanel();
+            showToast("Modèle supprimé !");
         }
 
         async function updateStaffPassword(index) {
